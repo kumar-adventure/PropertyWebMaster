@@ -1,0 +1,53 @@
+.container-fluid
+  %h1 Schedule meeting with visited properties
+  = form_tag bulk_contact_requests_path do
+    .span8
+      %div
+        - @property_visits.each do |visit|
+          #property_row
+            - if visit.property
+              .row-fluid
+                .span2= image_tag visit.property.property_images.first.photo.url if visit.property && visit.property.property_images.first 
+                .span6
+                  %b= link_to visit.property.title, visit.property, class: 'primary-link'
+                  %br/
+                  %b Address: 
+                  #{visit.property.address}
+                  %br/
+                  %b Area: 
+                  #{visit.property.saleable_area}
+                  %br/
+                  %b Total no of rooms: 
+                  #{visit.property.total_rooms}
+                .span3
+                  %b Price #{visit.property.price}
+                  %br/
+                  %button.btn.btn-warning{:style=> "padding:8px 12px", :type => 'button', :onclick => "update_request(this, #{visit.property.id}, '#{visit.property.title}')" } Request meeting
+                  %br/
+                  = link_to "View full details >>", visit.property
+    #request_form.span4
+      %h2 Request for site visit
+      = hidden_field_tag "properties", nil, id: :property_ids
+      #selected_properties.span4
+      .field
+        %label Name
+        = text_field_tag :name
+      .field
+        %label Address
+        = text_field_tag :address
+      - if current_user
+        .field
+          %label Email
+          = text_field_tag :email, current_user.email, readonly: true
+      - else
+        .field
+          %label Email
+          = text_field_tag :email
+      .field
+        %label Contact No
+        = text_field_tag :contact_no
+      .field
+        %label Message
+        = text_area_tag :note
+      .actions
+        = submit_tag 'Save'

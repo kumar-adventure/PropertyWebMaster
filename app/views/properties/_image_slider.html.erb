@@ -1,0 +1,72 @@
+<style>
+ .selected img {
+    opacity:0.5;
+    }
+</style>
+<script type="text/javascript">
+$(document).ready(function(){
+ $('#myCarousel').carousel({
+   interval: 4000
+ });
+
+ // handles the carousel thumbnails
+ $('[id^=carousel-selector-]').on('click', function(){
+   var id_selector = $(this).attr("id");
+   var id = id_selector.replace("carousel-selector-", "")
+   id = parseInt(id);
+   $('#myCarousel').carousel(id);
+   $('[id^=carousel-selector-]').removeClass('selected');
+   $(this).addClass('selected');
+ });
+
+// when the carousel slides, auto update
+$('#myCarousel').bind('slid', function (e) {
+  var id = $('.item.active').data('slide-number');
+  id = parseInt(id);
+  $('[id^=carousel-selector-]').removeClass('selected');
+  $('[id^=carousel-selector-'+id+']').addClass('selected');
+});
+});
+</script>
+<!-- main slider carousel -->
+<div class="row">
+    <div class="col-md-12" id="slider">
+        <div class="col-md-12" id="carousel-bounding-box">
+            <div id="myCarousel" class="carousel slide">
+                <!-- main slider carousel items -->
+                <div class="carousel-inner">
+                    <% counter = 0 %>
+                    <% @property.property_images.order(:id).each do |img| %>
+                      <div class="<%= 'active' if counter == 0 %> item" data-slide-number="<%= counter %>">
+                          <img src=<%= img.photo.url %> class="img-responsive">
+                      </div>
+                      <% counter += 1%>
+                    <% end %>
+
+                </div>
+                <!-- main slider carousel nav controls --> <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
+
+                <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/main slider carousel-->
+                        
+<!-- thumb navigation carousel -->
+<div class="col-md-12 " id="slider-thumbs">
+    <!-- thumb navigation carousel items -->
+    <ul class="list-inline">
+      
+      <% counter = 0 %>
+      <% @property.property_images.order(:id).each do |img| %>
+        <li> 
+          <a id="carousel-selector-<%= counter %>" class="<%= 'selected' if counter == 0 %>">
+            <img src=<%= img.photo.url%> class="img-responsive" style='height: 60px;width:80px;'>
+          </a>
+        </li> 
+        <% counter += 1%>
+      <%end%>
+    </ul>
+</div>
+                        

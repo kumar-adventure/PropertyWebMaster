@@ -1,0 +1,54 @@
+/*
+*/
+
+#language span a{
+    background: #000000;
+    border-radius: 6px;
+    border: 1px solid black;
+    padding: 3px;
+    color: white !important;
+}
+
+.notice{
+    color:red;
+    font-weight:bold;
+    padding: 8px
+}
+
+
+.center {
+    margin: 25px auto 0;
+}
+
+.primary-link {
+    color: blue !important;
+    text-decoration: underline !important;
+}
+
+#request_form {
+    background-color: white;
+    border: 1px solid green;
+    border-radius: 5px;
+    overflow: auto;
+    padding: 25px;
+}
+
+#property_row {
+    border: 1px solid gray;
+    border-radius: 7px 7px 7px 7px;
+    margin: 2px;
+    padding: 6px;
+}
+
+#property_row:hover {
+    border-color: gold;
+}
+
+.property_title {
+    background-color: gray;
+    color: white;
+    font-size: 20px;
+    margin: 2px;
+    padding: 3px;
+}
+

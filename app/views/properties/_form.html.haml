@@ -1,0 +1,121 @@
+:css
+  #map_canvas img {
+    max-width: none;
+  }
+:javascript
+  $(document).ready(function(){
+    $(".address")
+      .geocomplete({ types: ["geocode", "establishment"], componentRestrictions: {country: "hk"} })
+      .bind("geocode:result", function(event, result){
+
+        temp_result = result;
+        address = temp_result.address_components ;
+       
+        //if( address[1] != undefined ){
+        //  $("#property_city").val(address[1].long_name );
+        //}else{
+        //  $("#property_city").val('');
+        //}
+        //if( address[2] != undefined ){
+        //  $("#property_district").val(address[2].long_name );
+        //}else{
+        //  $("#property_district").val('');
+        //}
+    });
+
+  });
+= nested_form_for @property do |f|
+  - if @property.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@property.errors.count, "error")} prohibited this property from being saved:"
+      %ul
+        - @property.errors.full_messages.each do |msg|
+          %li= msg
+  .span6
+    .field.form-group
+      = f.label "Title"
+      = f.text_field :title, class: "input-block-level"
+    .field
+      = f.label :property_type
+      = f.select :property_type, options_for_select(Property::PROPERTY_TYPES), class: "input-block-level"
+    .field
+      = f.label "Details"
+      = f.text_area :long_desc, class: "input-block-level"
+    .field
+      #map_canvas{style: 'width: 100%; height: 400px;'}
+      = f.label :address
+      = f.text_field :address, class: "input-block-level address", id: 'address'
+      .pull-right
+        %input{ type: "button", value: "Geocode", onclick: "codeAddress()", class: 'btn btn-mini btn-primary'}/
+    .field
+      = f.label "English address"
+      = f.text_field :english_address
+    .field
+      = f.label "Chinese address"
+      = f.text_field :chinese_address
+    .field
+      = f.label "Block/Tower"
+      = f.text_field :building_name, class: 'input-block-level'
+    .field
+      = f.label :flat
+      = f.text_field :flat, class: 'input-block-level'
+    /.field
+    /  = f.label :street
+    /  = f.text_field :street, class: 'input-block-level'
+    /.field
+    /  = f.label :city
+    /  = f.text_field :city, class: "input-block-level"
+    /.field
+    /  = f.label :district
+    /  = f.text_field :district, class: "input-block-level"
+  .span5
+    .field.rent
+      = f.label "Rent (in HK$)"
+      = f.number_field :rent, class: "input-block-level"
+    .field.sale
+      = f.label "Price (in HK$)"
+      = f.number_field :price, class: "input-block-level"
+    .field
+      = f.label :facing
+      = f.select :facing, options_for_select(Property::FACING), class: "input-block-level"
+    .field
+      = f.label :flooring
+      = f.select :flooring, options_for_select(Property::FLOORING), class: "input-block-level"
+    .field
+      = f.label "Saleable area(in sqft)"
+      = f.number_field :saleable_area, class: "input-block-level"
+    .field
+      = f.label "Gross area(in sqft)"
+      = f.number_field :gross_area, class: "input-block-level"
+    .field
+      = f.label "Layout"
+      = f.select :total_rooms, options_for_select( (1..15).collect{|num| [num.to_s + " Rooms", num]}, @property.total_rooms ), class: "input-block-level"
+    .field
+      = f.label "No of bathrooms"
+      = f.select :bathrooms, options_for_select( (1..10).collect{|num| [num.to_s + " Bath rooms", num]}, @property.bathrooms ), class: "input-block-level"
+      = f.label "Terms and conditions"
+      = f.text_area :terms_and_condition_of_sale, class: "input-block-level"
+    .field
+      = f.label "Property floor"
+      = f.number_field :property_in, class: "input-block-level"
+    .field
+      = f.label :total_no_of_floors
+      = f.text_field :total_no_of_floors, class: "input-block-level"
+    .field
+      = f.label "Vacant"
+      = f.check_box :vacant_or_possession
+    .field
+      = f.label :open_for_inspection
+      = f.text_field :open_for_inspection, class: "input-block-level"
+    .field
+      = f.label :contact_hours
+      = f.text_field :contact_hours, class: "input-block-level"
+    .field
+      = f.label :available_from
+      = f.text_field :available_from, class: 'datepicker'
+    .field
+      = f.label :expiration_date
+      = f.text_field :expiration_date, class: 'datepicker'
+
+  .actions
+    = f.submit 'Next >>', class: 'btn btn-large btn-primary'

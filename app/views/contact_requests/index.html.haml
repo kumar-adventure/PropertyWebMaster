@@ -1,0 +1,24 @@
+.container-fluid{style: 'min-height: 550px;'}
+  %h1 Listing contact requests
+
+  %table.table.table-striped.table-bordered.table-hover.table-responsive
+    %tr
+      %th Preferred time
+      %th Property
+      %th Requested By
+      %th Note
+      %th Status
+      %th
+      /%th
+      /%th
+
+    - current_user.contact_requests_to_me.each do |contact_request|
+      %tr
+        %td= contact_request.preffered_time.to_s(:long) if contact_request.preffered_time
+        %td= link_to contact_request.property.title, contact_request.property, class: 'primary-link'
+        %td= link_to contact_request.user.name, contact_request.user, class: 'primary-link'
+        %td= contact_request.note
+        %td= contact_request.status.capitalize if contact_request.status
+        %td= link_to 'Show', contact_request, class: 'btn btn-primary'
+        /%td= link_to 'Edit', edit_contact_request_path(contact_request), class: 'btn btn-warning'
+        /%td= link_to 'Cancel', contact_request, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-danger'

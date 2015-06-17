@@ -1,0 +1,39 @@
+#add-email.container
+  %h1 Add Email
+  = form_for(current_user, :as => 'user', :url => finish_signup_path(current_user), :html => { role: 'form'}) do |f|
+    - if @show_errors && current_user.errors.any?
+      #error_explanation
+        - current_user.errors.full_messages.each do |msg|
+          = msg
+          %br/
+    .form-group
+      = f.label :email
+      .controls
+        = f.text_field :email, :autofocus => true, :value => '', class: 'form-control input-lg', placeholder: 'Example: email@me.com'
+        %p.help-block Please confirm your email address. No spam.
+    .field.form-group
+      = f.label :name
+      = f.text_field :name, class: "input-block-level"
+    .field.form-group
+      = f.label :address
+      = f.text_field :address, class: "input-block-level"
+    .field.form-group
+      = f.label :contact_on
+      = f.text_field :contact_no, class: "input-block-level"
+    .field.form-group
+      = f.label :photo
+      = f.file_field :photo, class: "input-block-level"
+    .field.form-group
+      = f.label "Highest Education"
+      = f.text_field :highest_education
+    .field.form-group
+      = f.label "Yearly Income"
+      = f.text_field :yearly_income
+    .field.form-group
+      = f.label "Date of Birth"
+      = f.text_field :date_of_birth, class: 'datepicker'
+    .field.form-group
+      = f.label "Gender"
+      = f.select :gender , options_for_select([['Male', 'M'], ['Female', 'F']])
+    .actions
+      = f.submit 'Continue', :class => 'btn btn-primary'

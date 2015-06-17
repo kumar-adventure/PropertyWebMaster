@@ -1,0 +1,146 @@
+:javascript
+
+  jQuery(function(){
+    $.post("/properties/map_block", {address: $("#tags").val() }, function(resp){
+      $("#leaflet_map_canvas").html(resp);
+    })
+    $("#searchProperty").on('click', function(){
+      var cnt = map.getCenter();
+      lat = cnt.lat ; 
+      lng = cnt.lng ; 
+      zoom = map.getZoom();
+
+      $.post("/properties/map_block", {address: $("#tags").val(), lat: lat, lng: lng, zoom: zoom },function(resp){
+        $("#leaflet_map_canvas").html(resp);
+      })
+    })
+    $("#applyFilter").on('click', function(){
+      $.post("/properties/map_block", {address: $("#tags").val() },function(resp){
+        $("#leaflet_map_canvas").html(resp);
+      })
+    })
+
+
+
+    jQuery( "#price-slider-range" ).slider({
+      range: true,
+      min: 0,
+      max: 500000,
+      values: [ #{params[:from_budget].to_i}, #{params[:to_budget].to_i} ],
+      slide: function( event, ui ) {
+        jQuery( "#price-amount" ).html( "Min :" + ui.values[ 0 ] + " - Max :" + ui.values[ 1 ] );
+      }
+    });
+    jQuery( "#price-amount" ).html( "Min :" + jQuery( "#price-slider-range" ).slider( "values", 0 ) +
+        " - Max :" + jQuery( "#price-slider-range" ).slider( "values", 1 ) );
+      
+  })
+:css
+  .navbar-fixed-top{
+    background: black !important;
+  }
+  .site-bar{
+    border: 1px solid gray;
+    height: auto;
+    border-radius: 4px;
+    background-color: white;
+  }
+
+  #map_canvas{
+    border: 1px solid gray;
+    border-radius: 4px;
+  }
+  #map_canvas img {
+    max-width: none;
+  }
+  .Propertytype, .Listing{
+    border: 1px solid black;
+    border-radius: 5px;
+  }
+- if current_user && @properties.length > 0
+  #extruderRight{ class: "{title:'Contact request', url:'#{custom_contact_form_property_path(@properties.first)}'}" }
+%br/
+%br/
+%br/
+%input{type: 'hidden', id: 'page-language', value: I18n.locale}
+.container-fluid
+  %h1 
+    #{@search_key}
+    .pull-right= link_to "Switch to list view", request.url + "&list_view=true", class: 'btn btn-primary'
+  %div.span12{:border => "1", style: 'padding-left: 0px; padding-right: 0px;'}
+    %div
+      %div.col-md-4.hidden-phone{style: 'padding-left: 0px; padding-right: 0px;'}
+        #leaflet_map_canvas{:style => "width: 100%;height: 550px;padding-left: 0px; padding-right: 0px;"}
+      %div.col-md-8.site-bar{style: 'padding-left: 0px; padding-right: 0px;'}
+        %form.navbar-form.navbar-left{role: "search", style: "width: 100%", :action => map_properties_path, :autocomplete => "off", :method => "get" }
+          .col-md-12.input-group
+          %input#tags.col-md-8.search-tag.form-control{name: "address", placeholder: "Search property", type: "search", style: 'width: 80%', value: params[:address] }/
+          %div.input-group-btn.search-tag
+            %button.btn.btn-primary{:type => "button", style: 'padding-top:12px;padding-bottom:12px;padding-left:12px;padding-right: 10px;', id: 'searchProperty'}
+              %span.glyphicon.glyphicon-search
+        %br/
+        .clearfix
+        #property-subdetails.span12
+          .row-fluid
+            .span8 
+              .span4
+                %h3{style: 'text-align: left;'} Listing type           
+                = select_tag :listing_type, options_for_select(['', 'Sale', 'Rent'], params[:listing_type])
+              .span7
+                %h3{style: 'text-align: right;'} Property type
+                .pull-right= select_tag :property_type, options_for_select(['', ''] + Property::PROPERTY_TYPES, params[:property_type])
+          .row-fluid            
+            .span3
+              %b Price:
+              #price-slider-range
+              #price-amount
+              %br/
+            .span3
+              %br/
+              %b Layout :
+              = select_tag :no_of_rooms, options_for_select( (1..15).collect{|num| [num.to_s + " Rooms", num]}, params[:no_of_rooms].to_i )
+              %br/
+              %select
+                %option Facilities
+              .span3.pull-right
+                %select
+                  %option Sort by
+                  %option Date
+                  %option Price
+        .clearfix
+        %button.btn.btn-primary{:type => "button", style: 'margin-left: 80%;padding-top:12px;padding-bottom:12px;padding-left:12px;padding-right: 10px;', id: 'applyFilter'} Apply filter
+        .no-padding{style: 'width: 100%'}
+          #side_bar
+          /   
+            - @properties.each do | property |
+              .prop-block
+                .span2
+                  .mini-slides
+                    - property.property_images.each do |img|
+                      %img{:src=> img.photo.url, alt: property.title }/
+                      - if property.property_images.length == 1
+                        %img{:src=> img.photo.url, alt: property.title }/
+                .span3.property-details
+                  =link_to property.title, property, target: '_blank'
+                  %br/
+                  = property.full_address
+                  %br/
+                  .span3.additional-details
+                    %b Area :
+                    = property.saleable_area.to_s + ' sqft '
+                    %br/
+                    %b No. of rooms :
+                    = property.total_rooms
+
+                .span2.pull-right
+                  .additional-sidebar-details
+                    - if( property.price != "")
+                      %b Price :
+                      = '$'+ property.price.to_s     
+                    %br/
+                    - if( property.rent != "")
+                      %b Rent : 
+                      = '$'+ property.rent.to_s 
+                  - unless current_user.nil?
+                    %input{:type=>'button', :class=>"btn btn-mini btn-warning", :value=>"Add to wishlist"}/
+                    %input{:type=>'button', :class=>"btn btn-mini btn-warning contact", :value=>"contact", "data-property-id" => property.id, "data-user-id" => current_user.id, "data-title" => property.title}/

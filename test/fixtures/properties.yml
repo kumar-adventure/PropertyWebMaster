@@ -1,0 +1,47 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  short_desc: MyText
+  price: MyString
+  size: 1
+  property_for: MyString
+  landmark: MyString
+  location: MyString
+  property_in: MyString
+  total_no_of_floors: MyString
+  bed_rooms: 1
+  total_rooms: 1
+  bathrooms: 1
+  parking: MyString
+  flooring: MyString
+  furnishing: MyString
+  open_for_inspection: MyString
+  address: MyString
+  city: MyString
+  district: MyString
+  zipcode: MyString
+  available_from: 2014-07-02
+
+two:
+  title: MyString
+  short_desc: MyText
+  price: MyString
+  size: 1
+  property_for: MyString
+  landmark: MyString
+  location: MyString
+  property_in: MyString
+  total_no_of_floors: MyString
+  bed_rooms: 1
+  total_rooms: 1
+  bathrooms: 1
+  parking: MyString
+  flooring: MyString
+  furnishing: MyString
+  open_for_inspection: MyString
+  address: MyString
+  city: MyString
+  district: MyString
+  zipcode: MyString
+  available_from: 2014-07-02

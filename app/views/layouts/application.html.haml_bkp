@@ -1,0 +1,220 @@
+<!doctype html>
+/[if lt IE 7] <html class="lt-ie9 lt-ie8 lt-ie7" lang="en-US">
+/[if IE 7] <html class="lt-ie9 lt-ie8" lang="en-US">
+/[if IE 8] <html class="lt-ie9" lang="en-US">
+/ [if gt IE 8]><!
+%html
+  / <![endif]
+  %meta{:content => "text/html;charset=UTF-8", "http-equiv" => "content-type"}/
+  %head
+    / META TAGS
+    %meta{:charset => "UTF-8"}/
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %title Property Web
+    %link{:href => "assets/favicon.png", :rel => "shortcut icon"}/
+    
+    %script{ src: "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places" }
+    %script{src:'//google-maps-utility-library-v3.googlecode.com/svn/tags/markerclustererplus/2.0.14/src/markerclusterer_packed.js', type: 'text/javascript'}
+
+    / Google Web Fonts
+    %link{:href => "http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800", :rel => "stylesheet", :type => "text/css"}/
+    %link{:href => "http://fonts.googleapis.com/css?family=Montserrat:400,700", :rel => "stylesheet", :type => "text/css"}/
+    %link{:href => "http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic", :rel => "stylesheet", :type => "text/css"}/
+
+    / Style Sheet
+    %link{:href => "/assets/style.css", :rel => "stylesheet"}/
+    / Pingback URL
+    %link{:href => "xmlrpc.php", :rel => "pingback"}/
+
+    / HTML5 shim, for IE6-8 support of HTML5 elements
+    /[if lt IE 9]
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+
+    = stylesheet_link_tag :application
+    = javascript_include_tag :application
+
+    = csrf_meta_tags
+
+    %style#dynamic-css{:type => "text/css"}
+      body{
+      color:#6f7579;
+      }
+
+      h1, h2, h3, h4, h5, h6, h1 a, h2 a, h3 a, h4 a, h5 a, h6 a{
+      color:#3b4348;
+      }
+
+      a{
+      color:#3b4348;
+      }
+
+      a:hover, a:focus, a:active{
+      color:#395996;
+      }
+    :css
+      .recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}
+
+    :javascript
+      jQuery(function (){
+        jQuery("#login").modal({show:false });
+        jQuery("#sign_up").modal({show:false });
+      })
+  %body.home.page.page-id-6.page-template.page-template-template-home-php
+    = render "welcome/login_modal"
+    = render "welcome/sign_up_modal"
+    / Start of Header
+    .header-wrapper
+      %header
+        .logo-container
+          .span2
+            / Website Logo
+            %a{:href => root_path, :title => "Property Web"}
+              %img{:alt => "Property Web", :src => "/assets/logo.png"}/
+            /%span.tag-line Your tag line here..
+          %h2.white{style: 'margin: 0px;'}= t('layout.title')
+        / Start of Main Navigation
+        %nav.main-nav
+          .menu-top-menu-container
+            %ul#menu-top-menu.clearfix
+              %li#menu-item-271.menu-item
+                %a{:href => new_property_path }= t('layout.post_your_property')
+              - unless current_user
+                %li#menu-item-272.menu-item
+                  %a{:href => "#sign_up", "data-toggle" => "modal" }= t('layout.sign_up')
+                %li#menu-item-275.menu-item
+                  %a{:href => "#login", "data-toggle" => "modal"}= t('layout.login')
+              - else
+                %li#menu-item-234.menu-item{style: 'margin-right: 100px;'}
+                  %a{:href => "#"} Account
+                  %ul.sub-menu
+                    %li#menu-item-274.menu-item
+                      %a{:href => edit_user_registration_path} Profile
+                    %li#menu-item-272.menu-item
+                      %a{:href => properties_users_path} My properties
+                    %li#menu-item-272.menu-item
+                      %a{:href => visits_users_path} Properties visited
+                    %li#menu-item-275.menu-item
+                      %a{:href => contact_requests_path} Meeting request
+                    %li#menu-item-274.menu-item
+                      = link_to 'Sign out', destroy_user_session_path, method: :delete
+        / End of Main Navigation
+    / End of Header
+    #language.pull-right.white
+      - if cookies[:language]
+        - if cookies[:language] == "zh-CN"
+          %span= link_to "EN", change_language_user_path("en")
+        - else
+          %span= link_to "CN", change_language_user_path("zh-CN")
+      - else
+        %span= link_to "EN", change_language_user_path("en")
+   
+    = yield
+    / Start of Footer
+    %footer#footer-wrapper
+      / Footer Bottom
+      #footer-bottom-wrapper
+        #footer-bottom.container
+          .row
+            .span6
+              %p.copyright
+                Copyright © 2014. All Rights Reserved by Property Web.
+            .span6
+              / Social Navigation
+              %ul.social-nav.clearfix
+                %li.linkedin
+                  %a{:href => "#", :target => "_blank"}
+                %li.stumble
+                  %a{:href => "#", :target => "_blank"}
+                %li.google
+                  %a{:href => "#", :target => "_blank"}
+                %li.deviantart
+                  %a{:href => "#", :target => "_blank"}
+                %li.flickr
+                  %a{:href => "#", :target => "_blank"}
+                %li.skype
+                  %a{:href => "#", :target => "_blank"}
+                %li.rss
+                  %a{:href => "#", :target => "_blank"}
+                %li.twitter
+                  %a{:href => "#", :target => "_blank"}
+                %li.facebook
+                  %a{:href => "#", :target => "_blank"}
+      / End of Footer Bottom
+    / End of Footer
+    :javascript
+      jQuery(document).ready(function(e) {
+
+          $ = jQuery;
+
+          /*-----------------------------------------------------------------------------------*/
+          /*	Responsive Nav
+          /*-----------------------------------------------------------------------------------*/
+          var $mainNav    = $('.main-nav > div').children('ul');
+          var optionsList = '<option value="" selected>Go to...</option>';
+
+          $mainNav.find('li').each(function() {
+              var $this   = $(this),
+                      $anchor = $this.children('a'),
+                      depth   = $this.parents('ul').length - 1,
+                      indent  = '';
+              if( depth ) {
+                  while( depth > 0 ) {
+                      indent += ' - ';
+                      depth--;
+                  }
+              }
+              optionsList += '<option value="' + $anchor.attr('href') + '">' + indent + ' ' + $anchor.text() + '</option>';
+          }).end();
+
+          $('.main-nav > div').after('<select class="responsive-nav">' + optionsList + '</select>');
+
+          $('.responsive-nav').on('change', function() {
+              window.location = $(this).val();
+          });
+
+
+
+          /*----------------------------------------------------------------------------------*/
+          /*	Contact Form AJAX validation and submition
+          /*  Validation Plugin : http://bassistance.de/jquery-plugins/jquery-plugin-validation/
+          /*	Form Ajax Plugin : http://www.malsup.com/jquery/form/
+          /*---------------------------------------------------------------------------------- */
+          if(jQuery().validate && jQuery().ajaxSubmit)
+          {
+              // Contact Form Handling
+              var contact_options = {
+                  target: '#message-sent',
+                  beforeSubmit: function(){
+                      $('#contact-loader').fadeIn('fast');
+                      $('#message-sent').fadeOut('fast');
+                  },
+                  success: function(responseText, statusText, xhr, $form){
+                      $('#contact-loader').fadeOut('fast');
+                      $('#message-sent').fadeIn('fast');
+
+                      if( responseText == "Wrong Code!" )
+                      {
+                          // wrong code
+                      }
+                      else if( responseText == "Message Sent Successfully!" )
+                      {
+                          $('#contact-form').resetForm();
+                      }
+                  }
+              };
+
+              $('#contact-form').validate({
+                  errorLabelContainer: $("div.error-container"),
+                  submitHandler: function(form) {
+                      $(form).ajaxSubmit(contact_options);
+                  }
+              });
+
+          }
+
+
+      });
+    %a#scroll-top{:href => "#top"}
+    %script{:src => "/assets/comment-reply.mina560.js", :type => "text/javascript"}
+    %script{:src => "/assets/editor98d8.js", :type => "text/javascript"}
+    %script{:src => "/assets/custom5152.js", :type => "text/javascript"}

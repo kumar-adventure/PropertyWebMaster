@@ -1,0 +1,14 @@
+.container
+  %h1 Listing contact messages
+
+  %table.table
+    - @contact_messages.each do |contact_message|
+      %tr
+        %td
+          = link_to contact_message.content, contact_message.contact_request
+          %br/
+          .pull-right
+            %b Property name :
+            = contact_message.contact_request.property.title
+          %b By :
+          = contact_message.user.name

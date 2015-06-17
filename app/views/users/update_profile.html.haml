@@ -1,0 +1,30 @@
+#main-wrap.main-bottom-wrap.container
+  %h1 Complete your profile
+  
+  = form_for current_user do |f|
+    .field.form-group
+      = f.label :name
+      = f.text_field :name, class: "input-block-level"
+    .field.form-group
+      = f.label :address
+      = f.text_field :address, class: "input-block-level"
+    .field.form-group
+      = f.label :contact_on
+      = f.text_field :contact_no, class: "input-block-level"
+    .field.form-group
+      = f.label :photo
+      = f.file_field :photo, class: "input-block-level"
+    .field.form-group
+      = f.label "Highest Education"
+      = f.text_field :highest_education
+    .field.form-group
+      = f.label "Yearly Income"
+      = f.text_field :yearly_income
+    .field.form-group
+      = f.label "Date of Birth"
+      = f.text_field :date_of_birth, class: 'datepicker'
+    .field.form-group
+      = f.label "Gender"
+      = f.select :gender , options_for_select([['Male', 'M'], ['Female', 'F']])
+    .actions
+      = f.submit 'Save', class: 'btn btn-large btn-primary'

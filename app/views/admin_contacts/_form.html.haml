@@ -1,0 +1,20 @@
+= form_for AdminContact.new do |f|
+  .col-md-12
+    .row
+      .col-md-6
+        .field
+          = f.label :email
+          = f.text_field :email, class: 'form-control'
+        .field
+          = f.label :name
+          = f.text_field :name, class: 'form-control'
+        .field
+          = f.label :contact_no
+          = f.text_field :contact_no, class: 'form-control'
+      .col-md-6
+        .field
+          = f.label :message
+          = f.text_area :message, class: 'form-control'
+  %br/
+  .actions
+    = f.submit 'Save', class: 'btn btn-primary', style: 'margin-top:5px;float:left;margin-left:15px'

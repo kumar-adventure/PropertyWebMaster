@@ -1,0 +1,277 @@
+/* Custom CSS File for Buyers to Modify */
+.modal-backdrop{
+  z-index: 1049 !important;
+}
+
+.property_details{
+  border: 1px solid gray;
+  color: black;
+}
+
+.title {
+    border: 1px solid gray;
+    color: black;
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding: 11px;
+    background-color: #a52a2a;
+}
+
+.property_image {
+    border: 5px solid gray;
+    height: 250px;
+    padding: 15px;
+    width: 375px;
+}
+
+.prop-block > a {
+    color: #0099FF;
+    font-weight: bolder;
+}
+.top-account {
+    background: none repeat scroll 0 0 #CFCFCF;
+    border-radius: 10px 10px 10px 10px;
+}
+
+.option-selector {
+display: block;
+width: auto;
+height: 40px;
+border: gray;
+background: gray;
+padding: 5px;
+margin: 1px 5px;
+}
+#language {
+  z-index: 999;
+  padding: 10px;
+  background: blue;
+}
+.search-tag{
+    height: 40px;
+    float: left;
+}
+.image-tumb {
+    border-radius: 5px 5px 5px 5px;
+    height: 65px;
+    margin: 0px;
+}
+.property-details {
+    margin-left: 0px;
+    margin-top: 10px;
+}
+.additional-details {
+    background: none repeat scroll 0 0 graytext;
+    padding: 0 15px;
+    width: -moz-max-content;
+    color: white;
+}
+.prop-block {
+    background: whitesmoke;
+    border: 1px solid black;
+    border-radius: 4px 4px 4px 4px;
+    height: auto;
+    overflow: auto;
+    padding: 5px;
+}
+
+.additional-sidebar-details {
+    background: none repeat scroll 0 0 black;
+    border-radius: 10px 10px 10px 10px;
+    color: white;
+    padding: 5px;
+    width: -moz-fit-content;
+}
+html, body {
+  width: auto !important;
+  overflow-x: hidden !important;
+}
+.page-data {
+    margin-top: 100px;
+}
+.property_row {
+    background: none repeat scroll 0 0 whitesmoke;
+    border-radius: 10px 10px 10px 10px;
+    margin-top: 5px;
+}
+#property-subdetails {
+    overflow: auto;
+}
+.lime-text {
+    background: none repeat scroll 0 0 lightgray;
+    border-radius: 5px;
+    color: gray;
+    font-size: 13px;
+    padding: 2px 10px;
+    width: -moz-fit-content;
+}
+.thumbenile{
+  width: 200px;
+  height: 200px;
+}
+.contact-request-row {
+    border: 1px solid gray;
+    padding: 1px 0;
+    border-radius: 5px;
+}
+.prop-title {
+  width: 100px;
+  float: left;
+  border: 1px solid gray;
+  margin: 2px;
+  border-radius: 5px;
+}
+.remove-button {
+  background: white;
+  border-radius: 33px;
+  font-size: 18px;
+  color: red;
+}
+.extruder-content {
+width: 425px !important;
+}
+
+.details-block {
+  border: 1px solid black;
+  overflow: hidden;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 10px;
+}
+.mini-slides .slidesjs-pagination {
+  display: none;
+}
+.mini-slides .slidesjs-navigation {
+  font-size: 10px;
+}
+.remove-prop {
+  font-size: 9px;
+  color: red;
+  float: right;
+  z-index: 999 ;
+}
+#leaflet_map_canvas {
+  border: 2px solid gray;
+  border-radius: 5px;
+}
+#slides .slidesjs-previous {
+    position: absolute;
+    top: 45%;
+    left: 10%;
+    z-index:999;
+}
+#slides .slidesjs-next{
+    position: absolute;
+    top: 45%;
+    right: 10%;
+    z-index:999;
+}
+
+#slides .slidesjs-navigation {
+      margin-top:5px;
+    }
+
+    a.slidesjs-next,
+    a.slidesjs-previous,
+    a.slidesjs-play,
+    a.slidesjs-stop {
+      background-image: url(/assets/btns-next-prev.png);
+      background-repeat: no-repeat;
+      display:block;
+      width:12px;
+      height:18px;
+      overflow: hidden;
+      text-indent: -9999px;
+      float: left;
+      margin-right:5px;
+    }
+
+    a.slidesjs-next {
+      margin-right:10px;
+      background-position: -12px 0;
+    }
+
+    a:hover.slidesjs-next {
+      background-position: -12px -18px;
+    }
+
+    a.slidesjs-previous {
+      background-position: 0 0;
+    }
+
+    a:hover.slidesjs-previous {
+      background-position: 0 -18px;
+    }
+
+    a.slidesjs-play {
+      width:15px;
+      background-position: -25px 0;
+    }
+
+    a:hover.slidesjs-play {
+      background-position: -25px -18px;
+    }
+
+    a.slidesjs-stop {
+      width:18px;
+      background-position: -41px 0;
+    }
+
+    a:hover.slidesjs-stop {
+      background-position: -41px -18px;
+    }
+
+    .slidesjs-pagination {
+      margin: 7px 0 0;
+      float: right;
+      list-style: none;
+    }
+
+    .slidesjs-pagination li {
+      float: left;
+      margin: 0 1px;
+    }
+
+    .slidesjs-pagination li a {
+      display: block;
+      width: 13px;
+      height: 0;
+      padding-top: 13px;
+      background-image: url(/img/pagination.png);
+      background-position: 0 0;
+      float: left;
+      overflow: hidden;
+    }
+
+    .slidesjs-pagination li a.active,
+    .slidesjs-pagination li a:hover.active {
+      background-position: 0 -13px
+    }
+
+    .slidesjs-pagination li a:hover {
+      background-position: 0 -26px
+    }
+
+    #slides a:link,
+    #slides a:visited {
+      color: #333
+    }
+
+    #slides a:hover,
+    #slides a:active {
+      color: #9e2020
+    }
+.loading {
+    display: block;
+    background-image: url('/assets/spinner.gif');
+    background-size: 100%;
+    background-repeat: repeat-x;
+    width: 124px;
+    height: 124px;
+    margin: 0 auto;
+}
+/* Hide all the children of the 'loading' element */
+.loading * {
+    display: none;  
+}

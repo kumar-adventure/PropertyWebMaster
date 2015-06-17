@@ -1,0 +1,23 @@
+= form_for @card_info do |f|
+  - if @card_info.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@card_info.errors.count, "error")} prohibited this card_info from being saved:"
+      %ul
+        - @card_info.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :card_no
+    = f.text_field :card_no
+  .field
+    = f.label :expire_month
+    = f.number_field :expire_month
+  .field
+    = f.label :expire_year
+    = f.number_field :expire_year
+  .field
+    = f.label :ccv
+    = f.number_field :ccv
+    = f.hidden_field :user_id, value: current_user.id
+  .actions
+    = f.submit 'Save'

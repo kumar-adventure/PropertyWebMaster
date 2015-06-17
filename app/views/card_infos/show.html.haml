@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b Card no:
+  = @card_info.card_no
+%p
+  %b Expire month:
+  = @card_info.expire_month
+%p
+  %b Expire year:
+  = @card_info.expire_year
+%p
+  %b Ccv:
+  = @card_info.ccv
+%p
+  %b User:
+  = @card_info.user_id
+
+= link_to 'Edit', edit_card_info_path(@card_info)
+\|
+= link_to 'Back', card_infos_path

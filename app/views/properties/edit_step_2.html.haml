@@ -1,0 +1,49 @@
+.container
+  = form_for @property do |f|
+    - if @property.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@property.errors.count, "error")} prohibited this property from being saved:"
+        %ul
+          - @property.errors.full_messages.each do |msg|
+            %li= msg
+    .span4
+      .field
+        = f.label "Balcony"
+        = f.check_box :balcony
+      .field
+        = f.label "Rooftop"
+        = f.check_box :rooftop
+      .field
+        = f.label "Clubhouse"
+        = f.check_box :clubhouse
+      .field
+        = f.label "Private Garden"
+        = f.check_box :private_garden
+    .span4
+      .field
+        = f.label "Gym room"
+        = f.check_box :gym_room
+      .field
+        = f.label "Shuttle bus"
+        = f.check_box :shuttle_bus
+      .field
+        = f.label "Shuttle bus"
+        = f.check_box :shuttle_bus
+      .field
+        = f.label "Sea view"
+        = f.check_box :sea_view
+    .span4
+      .field
+        = f.label "Pet allowed"
+        = f.check_box :pet_allowed
+      .field
+        = f.label "Parking garage"
+        = f.check_box :parking_garage
+      .field
+        = f.label "Private parking space"
+        = f.check_box :private_parking_space
+      .field
+        = f.label "Swiming pool"
+        = f.check_box :swiming_pool
+    .actions
+      = f.submit 'Save', class: 'btn btn-large btn-primary'

@@ -1,0 +1,22 @@
+.container
+  = form_for @property do |f|
+    - if @property.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@property.errors.count, "error")} prohibited this property from being saved:"
+        %ul
+          - @property.errors.full_messages.each do |msg|
+            %li= msg
+    .field.sale
+      = f.label "Terms and conditions"
+      = f.text_area :terms_and_condition_of_sale, class: "input-block-level"
+    .field
+      = f.label "Property floor"
+      = f.number_field :property_in, class: "input-block-level"
+    .field
+      = f.label :total_no_of_floors
+      = f.text_field :total_no_of_floors, class: "input-block-level"
+    .field
+      = f.label "Vacant"
+      = f.check_box :vacant_or_possession
+    .actions
+      = f.submit 'Next >>', class: 'btn btn-large btn-primary'

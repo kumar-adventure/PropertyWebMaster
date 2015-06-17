@@ -1,0 +1,42 @@
+= form_for @property do |f|
+  - if @property.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@property.errors.count, "error")} prohibited this property from being saved:"
+      %ul
+        - @property.errors.full_messages.each do |msg|
+          %li= msg
+  .span6
+    %h3 Renting conditions
+    .field
+      = f.label "Accept Short Lease or Not"
+      = f.check_box :accept_short_lease
+    .field
+      = f.label "Accept subletting"
+      = f.check_box :accept_shared_rent
+    .field
+      = f.label "Require Income proof"
+      = f.check_box :require_income_proof
+    .field
+      = f.label "Deposite"
+      = f.select :deposite, options_for_select( (1..12).to_a.collect{|x| [x.to_s + " month", x]}, @property.deposite)
+    .field
+      = f.label "Fixed Period".html_safe
+      = f.select :fixed_period, options_for_select( (1..12).to_a.collect{|x| [x.to_s + " month", x]}, @property.deposite)
+    .field
+      = f.label "Break Clause Notice"
+      = f.select :break_clause_notice, options_for_select( (1..12).to_a.collect{|x| [x.to_s + " month", x]}, @property.break_clause_notice)
+
+    
+  .span6
+    .field.rent
+      %h3 Rent inclusive of 
+      = f.label "Management fee"
+      = f.check_box :rent_inclusive_of_management_fee
+    .field.rent
+      = f.label "Goverment rent"
+      = f.check_box :rent_inclusive_of_govt_rent
+    .field
+      = f.label "Tenancy terms"
+      = f.text_area :tenancy_terms, class: "input-block-level"
+  .actions
+    = f.submit 'Next >>', class: 'btn btn-large btn-primary'

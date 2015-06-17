@@ -1,0 +1,19 @@
+= form_for @contact_request do |f|
+  - if @contact_request.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@contact_request.errors.count, "error")} prohibited this contact_request from being saved:"
+      %ul
+        - @contact_request.errors.full_messages.each do |msg|
+          %li= msg
+  = f.hidden_field :from_user_id, value: current_user.id
+  = f.hidden_field :to_user_id, value: @property.user.id
+  = f.hidden_field :property_id, value: @property.id
+  = f.hidden_field :status, value: 'pending'
+  .field
+    = f.label "Meeting time"
+    = f.text_field :preffered_time, class: 'datetime'
+  .field
+    = f.label "Message"
+    = f.text_area :note
+  .actions
+    = f.submit 'Save'

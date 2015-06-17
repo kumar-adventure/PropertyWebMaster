@@ -1,0 +1,23 @@
+%h1 Listing property_comments
+
+%table
+  %tr
+    %th User
+    %th Property
+    %th Content
+    %th
+    %th
+    %th
+
+  - @property_comments.each do |property_comment|
+    %tr
+      %td= property_comment.user
+      %td= property_comment.property
+      %td= property_comment.content
+      %td= link_to 'Show', property_comment
+      %td= link_to 'Edit', edit_property_comment_path(property_comment)
+      %td= link_to 'Destroy', property_comment, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Property comment', new_property_comment_path

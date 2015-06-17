@@ -1,0 +1,47 @@
+= form_tag bulk_contact_requests_path do
+  #request_form.span4{ style: 'max-height: 700px;overflow:scroll;'}
+    %h2 
+      Request for site
+      %br/
+      visit
+    #invitee_list.row{style: 'margin-left: 0px;'}
+      - current_user.temp_contact_requests.each do |req|
+        .prop-title
+          .remove-prop{'data-id'=> req.id} X 
+          = req.property.title
+    = hidden_field_tag "properties", nil, id: :property_ids
+    #selected_properties.span4.row
+    .field
+      %label Name
+      - if current_user
+        = text_field_tag :name, current_user.name
+      - else
+        = text_field_tag :name
+    .field
+      %label Address
+      - if current_user
+        = text_field_tag :address, current_user.address
+      - else
+        = text_field_tag :address
+    - if current_user
+      .field
+        %label Email
+        = text_field_tag :email, current_user.email, readonly: true
+    - else
+      .field
+        %label Email
+        = text_field_tag :email
+    .field
+      %label Contact No
+      - if current_user
+        = text_field_tag :contact_no, current_user.contact_no
+      - else
+        = text_field_tag :contact_no
+      Store to profile
+      = check_box_tag :store_to_profile
+    .field
+      %label Message
+      = text_area_tag :note
+    .actions
+      = submit_tag 'Save'
+

@@ -1,0 +1,211 @@
+:css
+  form div.input, form div.field {
+    margin-bottom: 3px;
+  }
+:javascript
+  jQuery(document).ready(function(){
+      var fenway = new google.maps.LatLng(#{@property.latitude}, #{@property.longitude});
+      var mapOptions = {
+        center: fenway,
+        zoom: 14
+      };
+      var map = new google.maps.Map(
+          document.getElementById('map-canvas'), mapOptions);
+      var panoramaOptions = {
+        position: fenway,
+        pov: {
+          heading: 34,
+          pitch: 10
+        }
+      };
+      var panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'), panoramaOptions);
+      map.setStreetView(panorama);
+
+
+  });
+%input{type: 'hidden', id: 'property_id', value: @property.id }/
+%input{type: 'hidden', id: 'property_title', value: @property.title }/
+- if current_user
+  %input{type: 'hidden', id: 'property_visit_status', value: @property.pending_invite_status(current_user.id)}/
+#extruderRight{ class: "{title:'Contact request', url:'#{custom_contact_form_property_path(@property)}'}" }
+.dnm-page-body
+  .content-wrapper
+    %section#content.listings.locations.locations-show
+      %section#hero
+        .hero-shadow
+        %article#space
+          .container-fluid
+            .row-fluid.padding-row
+              .span12.nested
+                %p
+                  %h2
+                    = @property.title
+                %p
+                  .pull-left.sub-title= @property.full_address
+                .pull-right= tweet_button(count: "horizontal")
+                .pull-right= like_button(FACEBOOK_APP_ID)
+                .pull-right= pinit_button
+                .pull-right= google_plus_button
+            .container-row
+              .two-thirds.column.left
+                %section.slider
+                  = render 'image_slider'
+                .padding-row
+                %article.location.listing
+                  %p
+                    = simple_format @property.long_desc
+                  .details-block
+                    %h1 Pricing
+                    .clearfix
+                    - if @property.available_for_sale
+                      = show_field("Unit price(Gross)", @property.unit_gross_price)
+                      = show_field("Unit price(Saleable)", @property.unit_saleable_price)
+                    - if @property.available_for_rent
+                      = show_field("Unit rent(Gross)", @property.unit_gross_rent)
+                      = show_field("Unit rent(Saleable)", @property.unit_saleable_rent)
+                  .details-block
+                    %h1 Overview 
+                    .clearfix
+                    = show_field("Property type", @property.property_type)
+                    = show_field("Saleable area", @property.saleable_area)
+                    = show_field("Gross area", @property.gross_area)
+                    = show_field("Efficiency ratio", @property.efficiency_ratio)
+                    = show_field("Rooms", @property.total_rooms)                  
+                    = show_field("Bathrooms", @property.bathrooms)                  
+                    = show_field("Floor", @property.flooring)                  
+                    = show_field("Facing", @property.facing)                  
+                    = show_field("Available from", @property.available_from )
+                    .clearfix
+                  .details-block
+                    %h1 Facilities and Features
+                    .clearfix
+                    = show_field("Balcony/Terrace      ", @property.balcony)
+                    = show_field("Rooftop              ", @property.rooftop)
+                    = show_field("Clubhouse            ", @property.clubhouse)
+                    = show_field("Swimming Pool        ", @property.swiming_pool)
+                    = show_field("Gym Room             ", @property.gym_room)
+                    = show_field("Shuttle Bus          ", @property.shuttle_bus)
+                    = show_field("Sea view             ", @property.sea_view)
+                    = show_field("Parking Garage       ", @property.parking_garage)
+                    = show_field("Private Parking Space", @property.private_parking_space)
+                    .clearfix
+                  - if @property.available_for_rent
+                    .details-block
+                      %h1 Leasing Conditions
+                      .clearfix
+                      = show_field("Accept Short Lease or Not   ", @property.accept_short_lease)
+                      = show_field("Accept sub-letting          ", @property.accept_shared_rent)
+                      = show_field("Require Income proof        ", @property.require_income_proof)
+                      = show_field("Deposit (in terms of month) ", @property.deposite)
+                      = show_field("Tenancy Term (no. of months)", @property.tenancy_terms)
+                      = show_field("Fixed Period (no. of months)", @property.fixed_period)
+                      = show_field("Break Clause Notice (no. of months)", @property.break_clause_notice)
+                      = show_field("Availability                       ", @property.available_from ) if @property.available_from
+                      = show_field("Rent Inclusive of ", "")
+                      = show_field("Government Rent and Rates       ", @property.rent_inclusive_of_govt_rent)
+                      = show_field("Management fee       ", @property.rent_inclusive_of_management_fee)
+                      .clearfix
+                  .details-block
+                    %h1 Download
+                    .clearfix
+                    = link_to "Agreement document", "#"
+                  .details-block
+                    %h1 About the post 
+                    .clearfix
+                    = show_field("Publish date", @property.created_at.to_s(:long) ) 
+                    = show_field("Last updated", @property.updated_at.to_s(:long) ) 
+                    = show_field("Post ID", @property.post_id )
+                  - if @property.property_comments.length > 0
+                    .details-block
+                      - @property.property_comments.each do |message|
+                        .row.contact-request-row.row-fluild
+                          .span2
+                            .thubenile=image_tag message.user.photo.url
+                            .lime-text= link_to message.user.name, message.user
+                          .span6
+                            .pull-right= message.created_at.to_s(:long)            
+                            .row-fluid= simple_format message.content
+                      = render "property_comments/form" if current_user 
+
+
+              .one-third.column.left
+                .toggleable-booking-modules
+                  %article.booking
+                    .listing{"data-listing-id" => "2156"}
+                      .booking-daily.booking-module-container{"data-toggleable-booking-module" => ""}
+                        .booking-module
+                          .booking-header
+                            %a.toggleable-booking-trigger{"data-booking-trigger" => "", :href => "#" }
+                              %span.booking-listing-name Details
+                          .booking-price-info
+                            %span= formatted_price(@property)
+                            %span.pull-right
+                              Desk
+                          .booking-body
+                            .booking-price
+                              %span.label
+                                - if @property.available_for_rent
+                                  #{@property.applicable_amount}
+                                - if @property.available_for_rent && @property.available_for_sale
+                                  "/"
+                                - if @property.available_for_sale
+                                  #{formatted_price(@property)}
+
+                                %span.period HK $ 
+                              %span.label
+                                #{@property.saleable_area}
+                                %span.period Sqft
+                              %span.label
+                                = @property.property_listing_for
+                                %span.period Listing for
+                            .clearfix
+                          .clearfix
+                  .padding-row
+                .administrator
+                  %img{:alt => @property.user.name, :src => @property.user.photo.url}/
+                  .info
+                    %span.name= @property.user.name
+                  =# link_to "View profile", @property.user, class: 'btn btn-blue btn-medium'
+                  - if current_user
+                    %br/
+                    %b Email:
+                    %span.lime-text Verified
+                    
+                    %br/
+                    %b Phone no:
+                    %span.lime-text= @property.user.phone_verification_status
+                    %br/
+                    %b Facebook:
+                    %span.lime-text Verified
+                    %br/
+                    %b Linkedin:
+                    %span.lime-text Verified
+                    %br/
+                  - else
+                    %a.btn.btn-blue.btn-medium{:href => "#login", "data-toggle" => "modal"}
+                      %span.text Contact
+                  .clearfix
+                .clearfix
+                .map.hidden-xs{style: 'margin-top: 2%;'}
+                  .map-wrapper.google-map
+                    #map-canvas.map-container
+                  .map-wrapper.google-map
+                    #pano.map-container
+                  .bottom-heading
+                    %a{"data-destination".to_sym => @property.address, "data-lat".to_sym => "#{@property.latitude}", "data-long".to_sym => "#{@property.longitude}", "data-routelink" => "true", :href => "//maps.google.com/?daddr=#{@property.address} ,  #{@property.district},  #{@property.city} #{@property.zipcode}&amp;saddr=", :target => "_blank"}
+                      = @property.address
+                    %span.ico-chevron-right.pull-right
+                  #address-popover
+                    %strong= @property.address
+                    %span ,  #{@property.district},  #{@property.city} #{@property.zipcode}
+                .padding-row
+              .clearfix
+.container-fluid
+  .clearfix.padding-row
+- if current_user
+  %div#contact_request_form.modal.fade{ :tabindex => "-1", :role => "dialog", "aria-labelledby".to_sym => "myModalLabel", "aria-hidden".to_sym => "true" }
+    .modal-header
+      %button.close{"data-dismiss" => "modal"} x
+      %h2 Contact request
+    .modal-body
+      = render "contact_requests/form"

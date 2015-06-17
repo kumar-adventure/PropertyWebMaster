@@ -1,0 +1,52 @@
+.container{style: 'min-height: 550px;'}
+  .center.span12
+    .row-fluid
+      %h2 Contact request details
+      %p
+        %b Requested By :
+        = link_to @contact_request.user.name, @contact_request.user
+      %p
+        %b Related Property :
+        = link_to @contact_request.property.title, @contact_request.property
+      /%p
+      /  %b Preferred time :
+      /  = @contact_request.preffered_time.to_s(:long) if @contact_request.preffered_time
+      /%p
+      /  %b Note :
+      /  = @contact_request.note
+      /%p
+      /  %b Status :
+      /  = @contact_request.status.capitalize
+      /%p
+      /  = link_to "Accept", accept_contact_request_path(@contact_request), class: 'btn btn-success' if @contact_request.status != "accepted"
+      /  = link_to "Reject", reject_contact_request_path(@contact_request), class: 'btn btn-danger'  if @contact_request.status != "rejected"
+
+    .clearfix
+    .row-fluid
+      - @contact_request.contact_messages.each do |message|
+        .row.contact-request-row.row-fluild
+          .span2
+            .thubenile=image_tag message.user.photo.url
+            .lime-text= link_to message.user.name, message.user
+          .span10
+            .pull-right= message.created_at.to_s(:long)            
+            .row-fluid= simple_format message.content
+            - if message.agreement.exists?
+              = link_to "Download", message.agreement.url
+    .row
+      .span8
+        %h1 Messages
+        = render "contact_messages/form"
+      .span6
+      // - if @contact_request.agreement_letter_sent
+      //   .pull-right= link_to "Accept", accept_contact_request_path(@contact_request), class: 'btn btn-warning'
+      //   %br/
+      //   .pull-right= link_to "Reject", reject_contact_request_path(@contact_request), class: 'btn btn-warning'
+      //   %br/
+
+      // - else
+      //   .pull-right= link_to "Generate rental agreement", rental_agreement_contact_request_path(@contact_request), class: 'btn btn-warning'
+      //   %br/
+      //   .pull-right= link_to "Preview rental agreement", generate_rental_agreement_contact_request_path(@contact_request), class: 'btn btn-warning'
+      //   %br/
+      //   .pull-right= link_to "Send rental agreement", agreement_contact_request_path(@contact_request), class: 'btn btn-warning'

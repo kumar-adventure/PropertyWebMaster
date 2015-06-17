@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b User:
+  = @property_comment.user
+%p
+  %b Property:
+  = @property_comment.property
+%p
+  %b Content:
+  = @property_comment.content
+
+= link_to 'Edit', edit_property_comment_path(@property_comment)
+\|
+= link_to 'Back', property_comments_path

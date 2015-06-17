@@ -1,0 +1,31 @@
+.container-fluid
+  = form_tag smart_post_invite_property_path(@property) do
+    %h1 Smart post suggestions
+    Below are the the users who have been doing similar searches.. 
+    .span8
+      %div
+        - @related_users.each do |user|
+          .property_row
+            .row-fluid
+              .span2= image_tag user.photo.url 
+              .span6
+                %b= link_to user.name, user, class: 'primary-link'
+                %br/
+                %b Age: 
+                #{ user.age}
+                %br/
+                %b Occupation: 
+                #{ user.occupation}
+                %br/
+                %b Education Background: 
+                #{ user.highest_education}
+                %br/
+                %b Biography: 
+                #{ user.about_me}
+                %br/
+                .pull-right
+                  %b Invite
+                  %input{type: 'checkbox', value: user.id, name: 'user_ids[]'}/
+    .span4
+      = text_area_tag :content, "Hello, please feel free to look at my property listing."
+      = submit_tag "Send"  

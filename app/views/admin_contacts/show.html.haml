@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Email:
+  = @admin_contact.email
+%p
+  %b Name:
+  = @admin_contact.name
+%p
+  %b Contact no:
+  = @admin_contact.contact_no
+%p
+  %b Message:
+  = @admin_contact.message
+
+= link_to 'Edit', edit_admin_contact_path(@admin_contact)
+\|
+= link_to 'Back', admin_contacts_path

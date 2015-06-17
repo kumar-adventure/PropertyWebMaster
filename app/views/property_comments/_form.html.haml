@@ -1,0 +1,8 @@
+= form_for PropertyComment.new do |f|
+  = f.hidden_field :user_id , value: current_user.id
+  = f.hidden_field :property_id, value: @property.id
+  .field
+    = f.label "Question/Comments :"
+    = f.text_area :content
+  .actions
+    = f.submit 'Save'

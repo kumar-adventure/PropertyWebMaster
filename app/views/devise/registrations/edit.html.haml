@@ -1,0 +1,101 @@
+= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
+  .container-fluid
+    %h2
+      Update profile
+    .span6
+      = devise_error_messages!
+      %div
+        = f.label "Display name"
+        %br/
+        = f.text_field :name
+      %div
+        = f.label :email
+        %br/
+        = f.email_field :email, autofocus: true
+      - if devise_mapping.confirmable? && resource.pending_reconfirmation?
+        %div
+          Currently waiting confirmation for: #{resource.unconfirmed_email}
+      %div
+        = f.label :password
+        %i (leave blank if you don't want to change it)
+        %br/
+        = f.password_field :password, autocomplete: "off"
+      %div
+        = f.label :password_confirmation
+        %br/
+        = f.password_field :password_confirmation, autocomplete: "off"
+      %div
+        = f.label :current_password
+        %i (we need your current password to confirm your changes)
+        %br/
+        = f.password_field :current_password, autocomplete: "off"
+      %div
+        = f.label "Profile Image"
+        = f.file_field :photo
+      %div
+        = f.label "Company"
+        = f.text_field :company
+      %div
+        = f.label "Address"
+        = f.text_field :address
+      %div
+        = f.label "Contact No."
+        = f.text_field :contact_no
+      %div
+        = f.label "Biography"
+        = f.text_area :about_me
+      %div
+        = f.label "Mail notification"
+        = f.check_box :mail_notification
+
+      %div= f.submit "Update"
+    .span4
+      = image_tag current_user.photo.url
+      %div
+        %br/
+        %br/
+        %div
+          = f.label "Gender"
+          = f.select :gender, options_for_select(User::GENDER, current_user.gender)
+        %div
+          = f.label "Age range"
+          = f.select :age, options_for_select(User::AGE, current_user.age)
+        %div
+          = f.label "Highest education"
+          = f.select :highest_education, options_for_select(User::EDUCATION, current_user.highest_education)
+        %div
+          = f.label "Awarding institution"
+          = f.select :allowing_institution, options_for_select(User::AWARDINGINSTITUTE, current_user.allowing_institution)
+        %div
+          = f.label "Occupation"
+          = f.select :occupation, options_for_select(User::OCCUPATION, current_user.occupation)
+        %div
+          = f.label "Monthly Income"
+          = f.select :monthly_income, options_for_select(User::MONTHLYINCOME, current_user.monthly_income)
+
+        %b Payment method :
+        %br/
+        - if current_user.card_infos.length == 0
+          Payment method not verified.
+          = link_to "Verify now", new_card_info_path, class: 'btn btn-success'
+        - else
+          Payment method verified.
+        %br/
+        %br/
+        %b Facebook :
+        %br/
+        - if current_user.identities.where(provider: 'facebook').length == 0
+          Facebook account not verified.
+          = link_to "Verify now", "/users/auth/facebook", class: 'btn btn-success'
+        - else
+          Facebook account verified.
+        %br/
+        %br/
+        %b LinkedIn :
+        %br/
+        - if current_user.identities.where(provider: 'linkedin').length == 0
+          LinkedIn account not verified.
+          = link_to "Verify now", "/users/auth/linkedin", class: 'btn btn-success'
+        - else
+          LinkedIn account verified.
+    = link_to "Back", :back

@@ -1,0 +1,11 @@
+.container-fluid{style: "min-height: 550px;"}
+  .search-area-wrapper
+    .search-area.container
+      %h3 Currently we didn't found any result for #{params[:address]}. Please broad your query to get results.
+      %h3.search-header Search Property
+      /%p.search-tag-line If you have any question you can ask below or enter what you are looking for!
+      .span5.black-box.row-fluid
+        %form#search-form.search-form.clearfix{:action => map_properties_path, :autocomplete => "off", :method => "get"}
+          %input#tags.query.required.span6.input-large{:name => "address", :placeholder => "Search by city or address", :title => "* Please enter a search term!", :type => "text", :onFocus=>"geolocate()"}/
+          %input.search-btn{:type => "submit", :value => "Search"}/
+          #search-error-container

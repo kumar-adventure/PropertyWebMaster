@@ -1,0 +1,115 @@
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}/
+    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
+    %meta{:content => "", :name => "description"}/
+    %meta{:content => "", :name => "author"}/
+
+    %title PropertyWeb - Boundless Reality Sales and Rentals
+
+    <link href="/assets/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="/assets/grayscale.css" rel="stylesheet" type="text/css">
+
+
+    <script src="/assets/jquery-1.11.0.js" type="text/javascript"></script>
+    <script src="/assets/jquery.easing.min.js" type="text/javascript"></script>
+    <script src="/assets/bootstrap.js" type="text/javascript"></script>
+    <script src="/assets/grayscale.js" type="text/javascript"></script>
+
+    = stylesheet_link_tag :application
+    = csrf_meta_tags
+
+    / Bootstrap Core CSS
+    /%link{:href => "css/bootstrap.css", :rel => "stylesheet"}/
+    / Custom CSS
+    /%link{:href => "css/grayscale.css", :rel => "stylesheet"}/
+
+    %script{ src: "https://maps.googleapis.com/maps/api/js?v=3.2&libraries=places&language=en" }
+
+    / Custom Fonts
+    %link{:href => "http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic", :rel => "stylesheet", :type => "text/css"}/
+    %link{:href => "http://fonts.googleapis.com/css?family=Montserrat:400,700", :rel => "stylesheet", :type => "text/css"}/
+    / HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
+    / WARNING: Respond.js doesn't work if you view the page via file://
+    /[if lt IE 9]
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  :javascript
+    jQuery(function (){
+      jQuery("#login").modal({show:false });
+      jQuery("#sign_up").modal({show:false });
+    })
+  %body#page-top.home.page.page-id-6.page-template.page-template-template-home-php
+    = render "welcome/login_modal"
+    = render "welcome/sign_up_modal"
+
+    / Navigation
+    %nav.navbar.navbar-custom.navbar-fixed-top{:role => "navigation"}
+      .container
+        %ul.nav.navbar-nav.pull-left
+          %li
+            %a.logo-button{:href => root_path} Property Web
+        .navbar-header
+          %button.navbar-toggle{"data-target" => ".navbar-main-collapse", "data-toggle" => "collapse", :type => "button"}
+            %i.fa.fa-bars
+        / Collect the nav links, forms, and other content for toggling
+        #language.pull-right.white
+          - if cookies[:language]
+            - if cookies[:language] == "zh-CN"
+              %span= link_to "EN", change_language_user_path("en")
+            - else
+              %span= link_to "CN", change_language_user_path("zh-CN")
+          - else
+            %span= link_to "EN", change_language_user_path("en")
+        .collapse.navbar-collapse.navbar-right.navbar-main-collapse
+          %ul.nav.navbar-nav
+            / Hidden li included to remove active class from about link when scrolled up past about section
+            %li.hidden
+              %a{:href => "#page-top"}
+            %li
+              %a.page-scroll.property-button{:href => new_property_path} List your property
+            - unless current_user
+              %li.navigation
+                %a.page-scroll.property-button{:href => "#login", "data-toggle" => "modal"} Login
+              %li.navigation
+                %a.page-scroll.property-button{:href => "#sign_up", "data-toggle" => "modal"} Sign Up
+              %li.navigation
+                %a.page-scroll.property-button{:href => "#contact"} Help
+            - else
+              - if current_user.is_admin
+                %li.dropdown
+                  %a.dropdown-toggle.property-button{:href => "#", "data-toggle" => "dropdown", style: 'padding: 10px 15px;' } Administration
+                  %ul.dropdown-menu
+                    %li#menu-item-274.menu-item
+                      %a{:href => "#"} DB Access 
+                    %li#menu-item-274.menu-item
+                      %a{:href => "#"} Cancelation Requests
+              %li.dropdown
+                %a.dropdown-toggle.property-button{:href => "#", "data-toggle" => "dropdown", style: 'padding: 10px 15px;' }= current_user.name
+                %ul.dropdown-menu
+                  %li#menu-item-274.menu-item
+                    %a{:href => edit_user_registration_path} Profile
+                  %li#menu-item-272.menu-item
+                    %a{:href => properties_users_path} My properties
+                  %li#menu-item-272.menu-item
+                    %a{:href => visits_users_path} Properties visited
+                  /%li#menu-item-275.menu-item
+                  /  %a{:href => contact_requests_path} Meeting request
+                  %li#menu-item-275.menu-item
+                    %a{:href => contact_messages_path} Messages
+                  %li#menu-item-274.menu-item
+                    = link_to 'Sign out', destroy_user_session_path, method: :delete
+            / /.navbar-collapse
+          / /.container
+    - if ( controller_name == 'properties' && action_name == 'index' ) || ( controller_name == 'properties' && action_name == 'map' )
+      = yield
+    - else
+      .page-data
+        = yield
+    / Footer
+    %footer
+      = javascript_include_tag :application
+      .container.text-center.left-align
+        %p Copyright &copy; PropertyWeb 2014

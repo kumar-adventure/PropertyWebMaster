@@ -1,0 +1,57 @@
+.container-fluid{style: 'min-height: 550px;'}
+  %h1
+    %span.padding
+      #{@user.name}
+  .clearfix
+  .row
+    .span3
+      = image_tag @user.photo.url
+    .span6
+      %b Name:
+      = @user.name
+
+      %br/
+      %b Email:
+      %span.lime-text Verified
+
+      %br/
+      %b Phone no:
+      %span.lime-text= @user.phone_verification_status
+      %br/
+      %b Facebook:
+      %span.lime-text Verified
+      %br/
+      %b Linkedin:
+      %span.lime-text Verified
+      %br/
+       
+
+      %b Available timings:
+      = @user.properties.collect(&:contact_hours).join(", ")
+
+      %br/
+      %br/
+  - if @user.properties.length > 0
+    .row-fluid
+      %h2 Listed properties
+      %table.table.table-striped.table-bordered.table-hover.table-responsive
+        - @user.properties.each do |property|
+          .property_row
+            .row-fluid
+              .span2= image_tag property.photo.url 
+              .span6
+                %b= link_to property.title, property, class: 'primary-link'
+                %br/
+                %b Address: 
+                #{property.address}
+                %br/
+                %b Area: 
+                #{property.saleable_area}
+                %br/
+                %b Total no of rooms: 
+                #{property.total_rooms}
+              .span3
+                %b Price #{property.price}
+                %br/
+                %br/
+                = link_to "View full details >>", property

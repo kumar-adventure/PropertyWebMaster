@@ -1,0 +1,73 @@
+/ Intro Header
+%header.intro
+  .intro-body
+    .container
+      .row
+        = flash[:search_notice]
+        .col-md-8.pull-left.intro-block
+          .pull-right.col-md-9
+            %form#search-form.search-form.clearfix{:action => map_properties_path, :autocomplete => "off", :method => "get"}
+              %input{type:'hidden', name: 'listing_type', id: 'listing_type' }/
+              %input{type:'hidden', name: 'property_type', id: 'property_type' }/
+              .row
+                %h1.intro-logo.pull-right Logo
+                %img.intro-logo-image.pull-right{:src => "/assets/downloads-bg.jpg"}/
+              .input-group.input-group-lg.form-section.col-md-12
+                %input#tags.form-control{:name => "address", :placeholder => "Search property", :type => "search"}/
+                %span.input-group-btn
+                  %button.btn.btn-primary{:type => "submit"}
+                    %span.glyphicon.glyphicon-search
+              .row
+                .col-md-4
+                  #Sale.Listing.col-md-1.section-block Sale
+                  #Rent.Listing.col-md-1.section-block Rent
+                .col-md-8.pull-right
+                  #Shops.Propertytype.col-md-1.section-subblock.pull-right Shops
+                  #Industrial.Propertytype.col-md-1.section-subblock.pull-right Industrial
+                  #Commercial.Propertytype.col-md-1.section-subblock.pull-right Commercial
+                  #Residential.Propertytype.col-md-1.section-subblock.pull-right Residential
+                  #Parking.Propertytype.col-md-1.section-subblock.pull-right Parking
+                  #Land.Propertytype.col-md-1.section-subblock.pull-right Land
+              .col-md-4.pull-right
+                %span.intro-label.pull-right No. of rooms
+                %br/
+                %select.form-control.mini-select.pull-right{:name => "no_of_rooms"}
+                  %option{:value => "1"} 1
+                  %option{:value => "2"} 2
+                  %option{:value => "3"} 3
+                  %option{:value => "4"} 4
+                  %option{:value => "5"} 5
+                  %option{:value => "6"} 6
+                  %option{:value => "7"} 7
+                  %option{:value => "8"} 8
+                  %option{:value => "9"} 9
+              .col-md-8.input-group.input-group-lg.form-section
+                .row
+                  .col-md-8.sub-details
+                    %div Budget (HK $)
+                    %input.mini.form-control{:name => "from_budget", :placeholder => "From", :type => "search"}/
+                    %input.mini.form-control{:name => "to_budget", :placeholder => "To", :type => "search"}/
+                /.row
+                /  .col-md-8.sub-details
+                /    %div Price (HK $)
+                /    %input.mini.form-control{:name => "from_price", :placeholder => "From", :type => "search"}/
+                /    %input.mini.form-control{:name => "to_price", :placeholder => "To", :type => "search"}/
+/ About Section
+%section#about.container.content-section.text-center
+  .span12
+    .col-lg-12.listing
+      %h2.left-align Recent listing
+      - counter = 0
+      - @properties.each do |prop|
+        - if counter % 3 == 0
+          .span12
+        - if prop.property_images.length > 0
+          .span3
+            = link_to image_tag(prop.property_images.first.photo.url), prop
+          - counter += 1
+/ Contact Section
+%section#contact.container.content-section.text-center
+  .span12
+    .col-lg-8
+      %h2.left-align Contact us
+      = render "admin_contacts/form"
