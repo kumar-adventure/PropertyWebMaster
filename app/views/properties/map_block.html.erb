@@ -19,30 +19,29 @@
 
     $(document).ready(function(){
         L.Icon.Default.imagePath = '/images';
-	map = L.map('map', { zoom: 13, layers: []});
+	      map = L.map('map', { zoom: 13, layers: []});
 
         var googleLayer = new L.Google('ROADMAP');
         map.addLayer(googleLayer);
 
-        <% if @properties.length > 0%>
-        //southWest= [22.34979357, 114.06132066 ];
-        //northEast= [22.15278487, 114.37031113 ]; 
-        //bounds = L.latLngBounds(southWest, northEast);
+        <% if @properties.length > 0 %>
+          //southWest= [22.34979357, 114.06132066 ];
+          //northEast= [22.15278487, 114.37031113 ]; 
+          //bounds = L.latLngBounds(southWest, northEast);
          
-
-        addressPoints = <%= @properties.to_json.html_safe %> ; 
-        property_count = 0 ;
-        for (var i = 0; i < addressPoints.length; i++) {
-          var a = addressPoints[i];
-        
-          if( room_count_filter(a.total_rooms) 
-            && price_filter(a.price, a.rent) 
-            && listing_type_filter(a.available_for_sale, a.available_for_rent) 
-            && property_type_filter(a.property_type) 
-          ){
-           property_count += 1; 
+          addressPoints = <%= @properties.to_json.html_safe %> ; 
+          property_count = 0 ;
+          for (var i = 0; i < addressPoints.length; i++) {
+            var a = addressPoints[i];
+          
+            if( room_count_filter(a.total_rooms) 
+              && price_filter(a.price, a.rent) 
+              && listing_type_filter(a.available_for_sale, a.available_for_rent) 
+              && property_type_filter(a.property_type) 
+            ){
+             property_count += 1; 
+            }
           }
-        }
 
         if( property_count > presentMarkers.length ){
 	  //map = L.map('map', { zoom: 13, minZoom: 11, maxBounds: bounds, layers: []});

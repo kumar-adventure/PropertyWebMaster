@@ -41,6 +41,8 @@ GEM
     bcrypt (3.1.7)
     bcrypt (3.1.7-x86-mingw32)
     builder (3.2.2)
+    byebug (5.0.0)
+      columnize (= 0.9.0)
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.4)
@@ -52,6 +54,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.8.0)
+    columnize (0.9.0)
     daemons (1.1.9)
     devise (3.3.0)
       bcrypt (~> 3.0)
@@ -149,7 +152,10 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
+    pg (0.18.2)
     polyglot (0.3.5)
+    quiet_assets (1.1.0)
+      railties (>= 3.1, < 5.0)
     rack (1.5.2)
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -210,8 +216,6 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
-    sqlite3 (1.3.9)
-    sqlite3 (1.3.9-x86-mingw32)
     stripe (1.15.0)
       json (~> 1.8.1)
       mime-types (>= 1.25, < 3.0)
@@ -247,6 +251,7 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt (~> 3.1.7)
+  byebug
   coffee-rails (~> 4.0.0)
   devise
   dusen
@@ -268,6 +273,8 @@ DEPENDENCIES
   omniauth-linkedin
   omniauth-oauth2 (= 1.2.0)
   paperclip!
+  pg
+  quiet_assets
   rails (= 4.1.1)
   rails-i18n (~> 4.0.0)
   rails_autocomplete
@@ -275,8 +282,10 @@ DEPENDENCIES
   sdoc (~> 0.4.0)
   social-buttons (~> 0.3)
   spring
-  sqlite3
   stripe
   thin
   tzinfo-data
   uglifier (>= 1.3.0)
+
+BUNDLED WITH
+   1.10.3

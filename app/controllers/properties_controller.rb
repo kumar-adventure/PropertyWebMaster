@@ -1,5 +1,5 @@
 class PropertiesController < ApplicationController
-  protect_from_forgery :except => :remove_image
+  protect_from_forgery :except => [:remove_image, :map_block]
   before_action :set_property, only: [:show, :edit, :update, :destroy, :smart_post, :smart_post_invite, 
     :edit_step_1, :edit_step_2 ]
   before_filter :authenticate_user!, only: [:new, :create]
@@ -47,21 +47,23 @@ class PropertiesController < ApplicationController
     @lat = params[:lat]
     @lng = params[:lng]
     @zoom = params[:zoom]  
+    #params[:address] = params[:address].to_s != "" ? params[:address] : "Hong Kong"
     if params[:address].to_s != ""
       @properties = Property.near(params[:address]).where.not("latitude is null or longitude is null")
     else
       @properties = Property.where.not("latitude is null or longitude is null")
     end
-    if params[:address] != ''
+    #if params[:address] != ''
       @loc = Geocoder.search(params[:address]).first
-    else
-      @loc = nil
-    end
-    render layout: nil
+    #else
+    #  @loc = nil
+    #end
+    render layout: false
   end
 
   def map
     @search_key = params[:address]
+    @search_key = "Hong Kong" if @search_key.blank?
     
     if current_user
       UserSearch.create(
@@ -75,20 +77,23 @@ class PropertiesController < ApplicationController
       )
     end
     
-    
     @loc = Geocoder.search(@search_key).first
-
+    #@properties = Property.near(@loc)
     #if @search_key == ''
-      @properties = Property.where.not("latitude is null or longitude is null")
+    #  @properties = Property.where.not("latitude is null or longitude is null")
     #else
-    #  @properties = Property.near(@search_key)
+    #  @properties = Property.near(params[:address]).where.not("latitude is null or longitude is null")
+    #  @properties = Property.where.not("latitude is null or longitude is null")
+    #else
+    #  @properties = Property.near(@loc)
     #end
 
+   
     #@bounds = @properties.collect{|property| [property.latitude, property.longitude] if property.latitude &&  property.longitude }
     #@bounds = @bounds.uniq
     #@bounds = @bounds - [ nil ]
     
-    filtered_properties = Array.new
+    #filtered_properties = Array.new
 
     #@properties.each do |prop|
     #  filtered_properties.push prop if prop.filter_search(params[:listing_type], params[:property_type], params[:from_budget], params[:to_budget], params[:no_of_rooms] )
@@ -99,7 +104,7 @@ class PropertiesController < ApplicationController
     if params[:list_view]
       render 'list'
     else
-        render 'map'
+      render 'map'
     end
   end
 

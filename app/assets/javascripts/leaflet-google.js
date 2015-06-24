@@ -13,8 +13,8 @@ L.Google = L.Class.extend({
 		errorTileUrl: '',
 		attribution: '',
 		opacity: 1,
-		continuousWorld: false,
-		noWrap: false,
+		continuousWorld: true,
+		noWrap: true,
 	},
 
 	// Possible types: SATELLITE, ROADMAP, HYBRID
@@ -91,7 +91,7 @@ L.Google = L.Class.extend({
 		    mapTypeId: this._type,
 		    disableDefaultUI: true,
 		    keyboardShortcuts: false,
-		    draggable: false,
+		    draggable: true,
 		    disableDoubleClickZoom: true,
 		    scrollwheel: false,
 		    streetViewControl: false

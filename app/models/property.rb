@@ -3,7 +3,9 @@ class Property < ActiveRecord::Base
 
   geocoded_by :full_address   # can also be an IP address
   after_validation :geocode          # auto-fetch coordinates
-
+  reverse_geocoded_by :latitude, :longitude
+  after_validation :reverse_geocode
+  
   scope :active, ->{ where is_active: true }
 
   translates :title, :short_desc, :price, :property_for, :landmark, :location, :property_in,
@@ -190,4 +192,5 @@ class Property < ActiveRecord::Base
   def post_id
     PROPERTY_ID_SPACER + self.id
   end
+  
 end

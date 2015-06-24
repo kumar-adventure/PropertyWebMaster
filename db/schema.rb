@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20141209132431) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "admin_contacts", force: true do |t|
     t.string   "email"
     t.string   "name"
@@ -55,8 +58,8 @@ ActiveRecord::Schema.define(version: 20141209132431) do
     t.datetime "agreement_updated_at"
   end
 
-  add_index "contact_messages", ["contact_request_id"], name: "index_contact_messages_on_contact_request_id"
-  add_index "contact_messages", ["user_id"], name: "index_contact_messages_on_user_id"
+  add_index "contact_messages", ["contact_request_id"], name: "index_contact_messages_on_contact_request_id", using: :btree
+  add_index "contact_messages", ["user_id"], name: "index_contact_messages_on_user_id", using: :btree
 
   create_table "contact_requests", force: true do |t|
     t.datetime "preffered_time"
@@ -82,7 +85,7 @@ ActiveRecord::Schema.define(version: 20141209132431) do
     t.datetime "updated_at"
   end
 
-  add_index "identities", ["user_id"], name: "index_identities_on_user_id"
+  add_index "identities", ["user_id"], name: "index_identities_on_user_id", using: :btree
 
   create_table "properties", force: true do |t|
     t.string   "title"
@@ -185,8 +188,8 @@ ActiveRecord::Schema.define(version: 20141209132431) do
     t.datetime "updated_at"
   end
 
-  add_index "property_comments", ["property_id"], name: "index_property_comments_on_property_id"
-  add_index "property_comments", ["user_id"], name: "index_property_comments_on_user_id"
+  add_index "property_comments", ["property_id"], name: "index_property_comments_on_property_id", using: :btree
+  add_index "property_comments", ["user_id"], name: "index_property_comments_on_user_id", using: :btree
 
   create_table "property_images", force: true do |t|
     t.integer  "property_id"
@@ -202,7 +205,7 @@ ActiveRecord::Schema.define(version: 20141209132431) do
     t.datetime "photo_updated_at"
   end
 
-  add_index "property_images", ["property_id"], name: "index_property_images_on_property_id"
+  add_index "property_images", ["property_id"], name: "index_property_images_on_property_id", using: :btree
 
   create_table "property_translations", force: true do |t|
     t.integer  "property_id",         null: false
@@ -229,8 +232,8 @@ ActiveRecord::Schema.define(version: 20141209132431) do
     t.text     "long_desc"
   end
 
-  add_index "property_translations", ["locale"], name: "index_property_translations_on_locale"
-  add_index "property_translations", ["property_id"], name: "index_property_translations_on_property_id"
+  add_index "property_translations", ["locale"], name: "index_property_translations_on_locale", using: :btree
+  add_index "property_translations", ["property_id"], name: "index_property_translations_on_property_id", using: :btree
 
   create_table "property_visiteds", force: true do |t|
     t.integer  "user_id"
@@ -260,7 +263,7 @@ ActiveRecord::Schema.define(version: 20141209132431) do
     t.datetime "updated_at"
   end
 
-  add_index "user_searches", ["user_id"], name: "index_user_searches_on_user_id"
+  add_index "user_searches", ["user_id"], name: "index_user_searches_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                     default: "",        null: false
@@ -309,8 +312,8 @@ ActiveRecord::Schema.define(version: 20141209132431) do
     t.string   "company"
   end
 
-  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end
