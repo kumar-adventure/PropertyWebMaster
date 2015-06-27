@@ -65,4 +65,5 @@ gem "jquery-fileupload-rails"
 group :development do
   gem 'quiet_assets'
   gem 'byebug'
+  gem 'pry'
 end
