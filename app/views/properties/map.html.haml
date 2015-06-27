@@ -27,7 +27,7 @@
     });
     
     $("#applyFilter").on('click', function(){
-      $.post("/properties/map_block", {address: $("#tags").val() },function(resp){
+      $.post("/properties/map_block", {address: $("#tags").val(), sort_by: $("#sort_by").val() },function(resp){
         $("#leaflet_map_canvas").html(resp);
       })
     })
@@ -39,6 +39,7 @@
       values: [ #{params[:from_budget].to_i}, #{params[:to_budget].to_i} ],
       slide: function( event, ui ) {
         jQuery( "#price-amount" ).html( "Min :" + ui.values[ 0 ] + " - Max :" + ui.values[ 1 ] );
+        
       }
     });
     jQuery( "#price-amount" ).html( "Min :" + jQuery( "#price-slider-range" ).slider( "values", 0 ) +
@@ -67,7 +68,7 @@
     border: 1px solid black;
     border-radius: 5px;
   }
-- if current_user && @properties.length > 0
+- if current_user && @properties.present? && @properties.length > 0
   #extruderRight{ class: "{title:'Contact request', url:'#{custom_contact_form_property_path(@properties.first)}'}" }
 %br/
 %br/
@@ -84,7 +85,7 @@
       %div.col-md-8.site-bar{style: 'padding-left: 0px; padding-right: 0px;'}
         %form.navbar-form.navbar-left{role: "search", style: "width: 100%", :action => map_properties_path, :autocomplete => "off", :method => "get" }
           .col-md-12.input-group
-          %input#tags.col-md-8.search-tag.form-control{name: "address", placeholder: "Search property", type: "search", style: 'width: 80%', value: params[:address] }/
+          %input#tags.col-md-8.search-tag.form-control{name: "address", placeholder: "Search property", type: "search", style: 'width: 80%', value: params[:address].present? ? params[:address] : 'Hong Kong' }/
           %div.input-group-btn.search-tag
             %button.btn.btn-primary{:type => "button", style: 'padding-top:12px;padding-bottom:12px;padding-left:12px;padding-right: 10px;', id: 'searchProperty'}
               %span.glyphicon.glyphicon-search
@@ -113,10 +114,7 @@
               %select
                 %option Facilities
               .span3.pull-right
-                %select
-                  %option Sort by
-                  %option Date
-                  %option Price
+                = select_tag :sort_by, options_for_select( [[ "Date","date" ], ["Price", "price"]]), prompt: 'Sort By'
         .clearfix
         %button.btn.btn-primary{:type => "button", style: 'margin-left: 80%;padding-top:12px;padding-bottom:12px;padding-left:12px;padding-right: 10px;', id: 'applyFilter'} Apply filter
         .no-padding{style: 'width: 100%'}

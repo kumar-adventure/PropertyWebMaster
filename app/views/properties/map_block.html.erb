@@ -18,288 +18,346 @@
     var presentMarkers = new Array();
 
     $(document).ready(function(){
-        L.Icon.Default.imagePath = '/images';
-	      map = L.map('map', { zoom: 13, layers: []});
+      L.Icon.Default.imagePath = '/images';
+      map = L.map('map', { zoom: 13, layers: []});
 
-        var googleLayer = new L.Google('ROADMAP');
-        map.addLayer(googleLayer);
+      var googleLayer = new L.Google('ROADMAP');
+      map.addLayer(googleLayer);
 
-        <% if @properties.length > 0 %>
-          //southWest= [22.34979357, 114.06132066 ];
-          //northEast= [22.15278487, 114.37031113 ]; 
-          //bounds = L.latLngBounds(southWest, northEast);
-         
-          addressPoints = <%= @properties.to_json.html_safe %> ; 
-          property_count = 0 ;
-          for (var i = 0; i < addressPoints.length; i++) {
-            var a = addressPoints[i];
-          
-            if( room_count_filter(a.total_rooms) 
-              && price_filter(a.price, a.rent) 
-              && listing_type_filter(a.available_for_sale, a.available_for_rent) 
-              && property_type_filter(a.property_type) 
-            ){
-             property_count += 1; 
-            }
-          }
-
-        if( property_count > presentMarkers.length ){
-	  //map = L.map('map', { zoom: 13, minZoom: 11, maxBounds: bounds, layers: []});
-
-          markers = L.markerClusterGroup({});
-
-          for (var i = 0; i < addressPoints.length; i++) {
-            var a = addressPoints[i];
-          
-            if( room_count_filter(a.total_rooms) 
-              && price_filter(a.price, a.rent) 
-              && listing_type_filter(a.available_for_sale, a.available_for_rent) 
-              && property_type_filter(a.property_type) 
-            ){
-          	var a = addressPoints[i];
-          	var title = a.title;
-          
-          	var marker = L.marker(new L.LatLng(a.latitude, a.longitude), { 
-                  position: i,
-                  title: title, 
-                  price: a.price, 
-                  english_formatted_price: a.english_formatted_price, 
-                  chineese_formatted_price: a.chineese_formatted_price, 
-                  rent: a.rent, 
-                  unit_gross_price: a.unit_gross_price, 
-                  unit_gross_rent: a.unit_gross_rent, 
-                  unit_saleable_price: a.unit_price, 
-                  unit_saleable_rent: a.unit_rent, 
-                  no_of_rooms: a.total_no_of_rooms,
-                  property_image_urls : a.property_image_urls
-                });
-
-                side_bar_html += "<div class='prop-block'>"
-                side_bar_html += "  <div class='span2'>"
-                side_bar_html += "    <div class='mini-slides'>"
-                $.each(a.property_image_urls, function(index, image_url){
-                  side_bar_html += "<image src='" + image_url + "' />"
-                })
-                if(a.property_image_urls.length == 1){
-                  side_bar_html += "<image src='" + a.property_image_urls[0] + "' />"
-                }
-                side_bar_html += "    </div>"
-                side_bar_html += "  </div>"
-                
-                side_bar_html += "  <div class='span3 property-details'>"
-                side_bar_html += "    <a href='/properties/"+ a.id +"' target='_blank'>"+ a.title + "</a>"
-                side_bar_html += "    <br/>"
-                side_bar_html +=     a.full_address
-                side_bar_html += "   <br/>"
-                side_bar_html += "   <div class='span3 additional-details'>"
-                side_bar_html += "     <b> Area :</b>"
-                side_bar_html +=      a.saleable_area + ' sqft '
-                side_bar_html += "     <br/>"
-                side_bar_html += "     <b> No. of rooms :</b>"
-                side_bar_html +=       a.total_rooms
-                side_bar_html += "   </div>"
-                side_bar_html += " </div>"
-                
-                side_bar_html += " <div class='span2 pull-right'>"
-                side_bar_html += "   <div class='additional-sidebar-details'>"
-
-                if( parseInt(a.price) != NaN && a.price != null ){
-                  side_bar_html += "       <b> Price : </b>"
-                  if( $("#page-language").val() == 'en' ){
-                    side_bar_html +=         '$'+ a.english_formatted_price
-                  }else{
-                    side_bar_html +=         '$'+ a.chineese_formatted_price
-                  }
-                  side_bar_html += "     <br/>"
-                }
-
-                if( parseInt(a.rent) != NaN && a.rent != null){
-                  side_bar_html += "       <b> Rent : </b>"
-                  side_bar_html += '$'+ a.rent
-                }
-                side_bar_html += "   </div>"
-                side_bar_html += " <button class='btn btn-warning contact' onclick=\"return invite_user("+ a.id +", '"+ title +"');\" id='contact-"+ a.id +"'>Contact Us</button>"
-                side_bar_html += " </div>"
-                side_bar_html += "</div>"
-          
-                popup_text  = "<b><a href='/properties/" + a.id +"'>" + title+ "</a></b><br/>";
-                popup_text += "" + a.long_desc + "<br/>";
-                popup_text += " <b>Area :</b>" + a.saleable_area + "<br/>";                
-                pop_up = new L.Rrose({autoPan: false}).setContent(popup_text);
-          	marker.bindPopup(pop_up);
-          	markers.addLayer(marker);
-              }
-          }
-  	  map.addLayer(markers);
-          map.fitBounds(markers.getBounds());
-
-          markers.on('clusterclick', function(a){
-            childMarkers = a.layer.getAllChildMarkers() ;
-
-            side_bar_html = "";
-
-            for(var j = 0; j < childMarkers.length; j++){
-
-                side_bar_html += "<div class='prop-block'>"
-                side_bar_html += "  <div class='span2'>"
-                side_bar_html += "    <div class='mini-slides'>"
-
-                a = addressPoints[childMarkers[j].options.position] ;
-                $.each(a.property_image_urls, function(index, image_url){
-                  side_bar_html += "<image src='" + image_url + "' />"
-                })
-                if(a.property_image_urls.length == 1){
-                  side_bar_html += "<image src='" + a.property_image_urls[0] + "' />"
-                }
-                side_bar_html += "    </div>"
-                side_bar_html += "  </div>"
-                
-                side_bar_html += "  <div class='span3 property-details'>"
-                side_bar_html += "    <a href='/properties/"+ a.id +"' target='_blank'>"+ a.title + "</a>"
-                side_bar_html += "    <br/>"
-                side_bar_html +=     a.full_address
-                side_bar_html += "   <br/>"
-                side_bar_html += "   <div class='span3 additional-details'>"
-                side_bar_html += "     <b> Area :</b>"
-                side_bar_html +=      a.saleable_area + ' sqft '
-                side_bar_html += "     <br/>"
-                side_bar_html += "     <b> No. of rooms :</b>"
-                side_bar_html +=       a.total_rooms
-                side_bar_html += "   </div>"
-                side_bar_html += " </div>"
-                
-                side_bar_html += " <div class='span2 pull-right'>"
-                side_bar_html += "   <div class='additional-sidebar-details'>"
-
-                if( parseInt(a.price) != NaN && a.price != null ){
-                  side_bar_html += "       <b> Price : </b>"
-                  if( $("#page-language").val() == 'en' ){
-                    side_bar_html +=         '$'+ a.english_formatted_price
-                  }else{
-                    side_bar_html +=         '$'+ a.chineese_formatted_price
-                  }
-                  side_bar_html += "     <br/>"
-                }
-
-                if( parseInt(a.rent) != NaN && a.rent != null){
-                  side_bar_html += "       <b> Rent : </b>"
-                  side_bar_html += '$'+ a.rent
-                }
-                side_bar_html += "   </div>"
-                side_bar_html += " <button class='btn btn-warning contact' onclick=\"return invite_user("+ a.id +", '"+ a.title +"');\" id='contact-"+ a.id +"'>Contact Us</button>"
-                side_bar_html += " </div>"
-                side_bar_html += "</div>"
-            }
-            $("#side_bar").html(side_bar_html); 
-            $(".mini-slides").slidesjs({
-              play: {auto: false, interval: 9000, swap: true, pauseOnHover: true},
-              height: 65,
-              width: 100
-            });
-          })
+      <% if @properties.length > 0 %>
+        //southWest= [22.34979357, 114.06132066 ];
+        //northEast= [22.15278487, 114.37031113 ]; 
+        //bounds = L.latLngBounds(southWest, northEast);
+       
+        addressPoints = <%= @properties.to_json.html_safe %> ; 
+        property_count = 0 ;
+        for (var i = 0; i < addressPoints.length; i++) {
+          var a = addressPoints[i];
         
-          markers.on('clustermouseover', function (a) {
-            childMarkers = a.layer.getAllChildMarkers() ;
-            max_price = 0 ;
-            min_price = 99999999999999999;
-            max_rent = 0 ;
-            min_rent = 99999999999999999;
-            total_price = 0 ; 
-            total_rent = 0 ;
-          
-            unit_saleable_price = 0;
-            unit_saleable_rent  = 0;
-            unit_gross_price    = 0;
-            unit_gross_rent     = 0; 
-          
-            sale_property_count = 0;
-            rent_property_count = 0;
-          
-            for(var j = 0; j < childMarkers.length; j++){
-              present_price = parseInt(childMarkers[j].options.price)
-              present_rent = parseInt(childMarkers[j].options.rent)
-          
-              unit_saleable_price += parseFloat(childMarkers[j].options.unit_saleable_price) ;
-              unit_saleable_rent  += parseFloat(childMarkers[j].options.unit_saleable_rent) ;
-              unit_gross_price    += parseFloat(childMarkers[j].options.unit_gross_price) ;
-              unit_gross_rent     += parseFloat(childMarkers[j].options.unit_gross_rent) ; 
+          if( room_count_filter(a.total_rooms) 
+            && price_filter(a.price, a.rent) 
+            && listing_type_filter(a.available_for_sale, a.available_for_rent) 
+            && property_type_filter(a.property_type) 
+          ){
+           property_count += 1; 
+          }
+        }
+
+      if( property_count > presentMarkers.length ){
+  //map = L.map('map', { zoom: 13, minZoom: 11, maxBounds: bounds, layers: []});
+
+        markers = L.markerClusterGroup({});
+
+        for (var i = 0; i < addressPoints.length; i++) {
+          var a = addressPoints[i];
+        
+          if( room_count_filter(a.total_rooms) 
+            && price_filter(a.price, a.rent) 
+            && listing_type_filter(a.available_for_sale, a.available_for_rent) 
+            && property_type_filter(a.property_type) 
+          ){
+            var a = addressPoints[i];
+            var title = a.title;
+        
+            var marker = L.marker(new L.LatLng(a.latitude, a.longitude), { 
+              position: i,
+              title: title, 
+              price: a.price, 
+              english_formatted_price: a.english_formatted_price, 
+              chineese_formatted_price: a.chineese_formatted_price, 
+              rent: a.rent, 
+              unit_gross_price: a.unit_gross_price, 
+              unit_gross_rent: a.unit_gross_rent, 
+              unit_saleable_price: a.unit_price, 
+              unit_saleable_rent: a.unit_rent, 
+              no_of_rooms: a.total_no_of_rooms,
+              property_image_urls : a.property_image_urls
+            });
+
+            side_bar_html += "<div class='prop-block'>"
+            side_bar_html += "  <div class='span2'>"
+            side_bar_html += "    <div class='mini-slides'>"
+            $.each(a.property_image_urls, function(index, image_url){
+              side_bar_html += "<image src='" + image_url + "' />"
+            })
+            if(a.property_image_urls.length == 1){
+              side_bar_html += "<image src='" + a.property_image_urls[0] + "' />"
+            }
+            side_bar_html += "    </div>"
+            side_bar_html += "  </div>"
+            
+            side_bar_html += "  <div class='span3 property-details'>"
+            side_bar_html += "    <a href='/properties/"+ a.id +"' target='_blank'>"+ a.title + "</a>"
+            side_bar_html += "    <br/>"
+            side_bar_html +=     a.full_address
+            side_bar_html += "   <br/>"
+            side_bar_html += "   <div class='span3 additional-details'>"
+            side_bar_html += "     <b> Area :</b>"
+            side_bar_html +=      a.saleable_area + ' sqft '
+            side_bar_html += "     <br/>"
+            side_bar_html += "     <b> No. of rooms :</b>"
+            side_bar_html +=       a.total_rooms
+            side_bar_html += "   </div>"
+            side_bar_html += " </div>"
+            
+            side_bar_html += " <div class='span2 pull-right'>"
+            side_bar_html += "   <div class='additional-sidebar-details'>"
+
+            if( parseInt(a.price) != NaN && a.price != null ){
+              side_bar_html += "       <b> Price : </b>"
+              if( $("#page-language").val() == 'en' ){
+                side_bar_html +=         '$'+ a.english_formatted_price
+              }else{
+                side_bar_html +=         '$'+ a.chineese_formatted_price
+              }
+              side_bar_html += "     <br/>"
+            }
+
+            if( parseInt(a.rent) != NaN && a.rent != null){
+              side_bar_html += "       <b> Rent : </b>"
+              side_bar_html += '$'+ a.rent
+            }
+            side_bar_html += "   </div>"
+            side_bar_html += " <button class='btn btn-warning contact' onclick=\"return invite_user("+ a.id +", '"+ title +"');\" id='contact-"+ a.id +"'>Contact Us</button>"
+            side_bar_html += " </div>"
+            side_bar_html += "</div>"
+      
+            popup_text  = "<b><a href='/properties/" + a.id +"'>" + title+ "</a></b><br/>";
+            popup_text += "" + a.long_desc + "<br/>";
+            popup_text += " <b>Area :</b>" + a.saleable_area + "<br/>";                
+            pop_up = new L.Rrose({autoPan: false}).setContent(popup_text);
+            marker.bindPopup(pop_up);
+            markers.addLayer(marker);
+            marker.on('click', function(){
+              this_side_bar_html = ""
+              this_side_bar_html += "<div class='prop-block'>"
+              this_side_bar_html += "  <div class='span2'>"
+              this_side_bar_html += "    <div class='mini-slides'>"
+              a = addressPoints[this.options.position]
+              console.log(a)
+              $.each(a.property_image_urls, function(index, image_url){
+                this_side_bar_html += "<image src='" + image_url + "' />"
+              })
+              if(a.property_image_urls.length == 1){
+                this_side_bar_html += "<image src='" + a.property_image_urls[0] + "' />"
+              }
+              this_side_bar_html += "    </div>"
+              this_side_bar_html += "  </div>"
               
-              if( present_price != NaN){
-                if(max_price < present_price ){ max_price = present_price }
-                if(min_price > present_price ){ min_price = present_price }
-                sale_property_count += 1 ;
+              this_side_bar_html += "  <div class='span3 property-details'>"
+              this_side_bar_html += "    <a href='/properties/"+ a.id +"' target='_blank'>"+ a.title + "</a>"
+              this_side_bar_html += "    <br/>"
+              this_side_bar_html +=     a.full_address
+              this_side_bar_html += "   <br/>"
+              this_side_bar_html += "   <div class='span3 additional-details'>"
+              this_side_bar_html += "     <b> Area :</b>"
+              this_side_bar_html +=      a.saleable_area + ' sqft '
+              this_side_bar_html += "     <br/>"
+              this_side_bar_html += "     <b> No. of rooms :</b>"
+              this_side_bar_html +=       a.total_rooms
+              this_side_bar_html += "   </div>"
+              this_side_bar_html += " </div>"
+              
+              this_side_bar_html += " <div class='span2 pull-right'>"
+              this_side_bar_html += "   <div class='additional-sidebar-details'>"
+
+              if( parseInt(a.price) != NaN && a.price != null ){
+                this_side_bar_html += "       <b> Price : </b>"
+                if( $("#page-language").val() == 'en' ){
+                  this_side_bar_html +=         '$'+ a.english_formatted_price
+                }else{
+                  this_side_bar_html +=         '$'+ a.chineese_formatted_price
+                }
+                this_side_bar_html += "     <br/>"
               }
-              if( parseInt(childMarkers[j].rent) != NaN){
-                if(max_rent < present_rent ){ max_rent = present_rent }
-                if(min_rent > present_rent ){ min_rent = present_rent }
-                rent_property_count += 1 ;
+
+              if( parseInt(a.rent) != NaN && a.rent != null){
+                this_side_bar_html += "       <b> Rent : </b>"
+                this_side_bar_html += '$'+ a.rent
               }
-              total_price += present_price;
-              total_rent += present_rent;
-          
-            };
-          
-            average_price = total_price / childMarkers.length ;
-            average_rent = total_rent / childMarkers.length ;
-          
-            average_unit_saleable_price = "NA"
-            average_unit_saleable_rent = "NA"
-            average_unit_gross_price = "NA"
-            average_unit_gross_rent = "NA"
-            if( sale_property_count != 0 ) {
-              average_unit_saleable_price = ( unit_saleable_price / sale_property_count).toFixed(2) ;
-              average_unit_gross_price =    ( unit_gross_price / sale_property_count  ).toFixed(2) ;
-            }
-            if( rent_property_count != 0 ) {
-              average_unit_saleable_rent =  ( unit_saleable_rent / rent_property_count ).toFixed(2) ;
-              average_unit_gross_rent =     ( unit_gross_rent / rent_property_count   ).toFixed(2) ;
-            }
-          
-            pop_up_text  = "<b>Pricing info</b><br/>"
-          
-            pop_up_text += "Pricing range : " + min_price + " - " + max_price + "<br/>";
-            pop_up_text += "Renting range : " + min_rent  + " - " + min_rent  + "<br/>";
-            pop_up_text += "Average unit price : " + average_unit_saleable_price  + " per sqft<br/>";
-            pop_up_text += "Average unit rent : " + average_unit_saleable_rent  + " per sqft<br/>";
-            //var tooltip = L.tooltip({
-            //  showDelay: 10,
-            //  target: a.layer,
-            //  map: map,
-            //  html: pop_up_text
-            //});
-            pop_up = new L.Rrose({offset: new L.Point(0,-10), autoPan: false}).setContent(pop_up_text);
-            a.layer.bindPopup(pop_up).openPopup();
-          
-          });
-          markers.on('clustermouseout', function (a) {
-            setTimeout(function(){map.closePopup()}, 300);
-          })
+              this_side_bar_html += "   </div>"
+              this_side_bar_html += " <button class='btn btn-warning contact' onclick=\"return invite_user("+ a.id +", '"+ a.title +"');\" id='contact-"+ a.id +"'>Contact Us</button>"
+              this_side_bar_html += " </div>"
+              this_side_bar_html += "</div>"
+              $('#side_bar').html(this_side_bar_html);
+              $(".mini-slides").slidesjs({
+                play: {auto: false, interval: 9000, swap: true, pauseOnHover: true},
+                height: 65,
+                width: 100
+              });
+            });
+          }
+        }
+
+        map.addLayer(markers);
+        map.fitBounds(markers.getBounds());
+
+        markers.on('clusterclick', function(a){
+          childMarkers = a.layer.getAllChildMarkers() ;
+
+          side_bar_html = "";
+
+          for(var j = 0; j < childMarkers.length; j++){
+
+              side_bar_html += "<div class='prop-block'>"
+              side_bar_html += "  <div class='span2'>"
+              side_bar_html += "    <div class='mini-slides'>"
+
+              a = addressPoints[childMarkers[j].options.position] ;
+              $.each(a.property_image_urls, function(index, image_url){
+                side_bar_html += "<image src='" + image_url + "' />"
+              })
+              if(a.property_image_urls.length == 1){
+                side_bar_html += "<image src='" + a.property_image_urls[0] + "' />"
+              }
+              side_bar_html += "    </div>"
+              side_bar_html += "  </div>"
+              
+              side_bar_html += "  <div class='span3 property-details'>"
+              side_bar_html += "    <a href='/properties/"+ a.id +"' target='_blank'>"+ a.title + "</a>"
+              side_bar_html += "    <br/>"
+              side_bar_html +=     a.full_address
+              side_bar_html += "   <br/>"
+              side_bar_html += "   <div class='span3 additional-details'>"
+              side_bar_html += "     <b> Area :</b>"
+              side_bar_html +=      a.saleable_area + ' sqft '
+              side_bar_html += "     <br/>"
+              side_bar_html += "     <b> No. of rooms :</b>"
+              side_bar_html +=       a.total_rooms
+              side_bar_html += "   </div>"
+              side_bar_html += " </div>"
+              
+              side_bar_html += " <div class='span2 pull-right'>"
+              side_bar_html += "   <div class='additional-sidebar-details'>"
+
+              if( parseInt(a.price) != NaN && a.price != null ){
+                side_bar_html += "       <b> Price : </b>"
+                if( $("#page-language").val() == 'en' ){
+                  side_bar_html +=         '$'+ a.english_formatted_price
+                }else{
+                  side_bar_html +=         '$'+ a.chineese_formatted_price
+                }
+                side_bar_html += "     <br/>"
+              }
+
+              if( parseInt(a.rent) != NaN && a.rent != null){
+                side_bar_html += "       <b> Rent : </b>"
+                side_bar_html += '$'+ a.rent
+              }
+              side_bar_html += "   </div>"
+              side_bar_html += " <button class='btn btn-warning contact' onclick=\"return invite_user("+ a.id +", '"+ a.title +"');\" id='contact-"+ a.id +"'>Contact Us</button>"
+              side_bar_html += " </div>"
+              side_bar_html += "</div>"
+          }
           $("#side_bar").html(side_bar_html); 
           $(".mini-slides").slidesjs({
             play: {auto: false, interval: 9000, swap: true, pauseOnHover: true},
             height: 65,
             width: 100
           });
-        }else{         
-          <% if @lat && @lng && @zoom %>
-            map.setView(new L.LatLng(<%= "#{@lat}, #{@lng}" %>), <%= @zoom %>);
-          <% else %>
-            map.setView(new L.LatLng( 22.2670, 114.1880), 12);
-          <% end %>
-          $("#side_bar").html(""); 
-        }
-        <% end %>
+        })
+      
+        markers.on('clustermouseover', function (a) {
+          childMarkers = a.layer.getAllChildMarkers() ;
+          max_price = 0 ;
+          min_price = 99999999999999999;
+          max_rent = 0 ;
+          min_rent = 99999999999999999;
+          total_price = 0 ; 
+          total_rent = 0 ;
+        
+          unit_saleable_price = 0;
+          unit_saleable_rent  = 0;
+          unit_gross_price    = 0;
+          unit_gross_rent     = 0; 
+        
+          sale_property_count = 0;
+          rent_property_count = 0;
+        
+          for(var j = 0; j < childMarkers.length; j++){
+            present_price = parseInt(childMarkers[j].options.price)
+            present_rent = parseInt(childMarkers[j].options.rent)
+        
+            unit_saleable_price += parseFloat(childMarkers[j].options.unit_saleable_price) ;
+            unit_saleable_rent  += parseFloat(childMarkers[j].options.unit_saleable_rent) ;
+            unit_gross_price    += parseFloat(childMarkers[j].options.unit_gross_price) ;
+            unit_gross_rent     += parseFloat(childMarkers[j].options.unit_gross_rent) ; 
+            
+            if( present_price != NaN){
+              if(max_price < present_price ){ max_price = present_price }
+              if(min_price > present_price ){ min_price = present_price }
+              sale_property_count += 1 ;
+            }
+            if( parseInt(childMarkers[j].rent) != NaN){
+              if(max_rent < present_rent ){ max_rent = present_rent }
+              if(min_rent > present_rent ){ min_rent = present_rent }
+              rent_property_count += 1 ;
+            }
+            total_price += present_price;
+            total_rent += present_rent;
+        
+          };
+        
+          average_price = total_price / childMarkers.length ;
+          average_rent = total_rent / childMarkers.length ;
+        
+          average_unit_saleable_price = "NA"
+          average_unit_saleable_rent = "NA"
+          average_unit_gross_price = "NA"
+          average_unit_gross_rent = "NA"
+          if( sale_property_count != 0 ) {
+            average_unit_saleable_price = ( unit_saleable_price / sale_property_count).toFixed(2) ;
+            average_unit_gross_price =    ( unit_gross_price / sale_property_count  ).toFixed(2) ;
+          }
+          if( rent_property_count != 0 ) {
+            average_unit_saleable_rent =  ( unit_saleable_rent / rent_property_count ).toFixed(2) ;
+            average_unit_gross_rent =     ( unit_gross_rent / rent_property_count   ).toFixed(2) ;
+          }
+        
+          pop_up_text  = "<b>Pricing info</b><br/>"
+        
+          pop_up_text += "Pricing range : " + min_price + " - " + max_price + "<br/>";
+          pop_up_text += "Renting range : " + min_rent  + " - " + min_rent  + "<br/>";
+          pop_up_text += "Average unit price : " + average_unit_saleable_price  + " per sqft<br/>";
+          pop_up_text += "Average unit rent : " + average_unit_saleable_rent  + " per sqft<br/>";
+          //var tooltip = L.tooltip({
+          //  showDelay: 10,
+          //  target: a.layer,
+          //  map: map,
+          //  html: pop_up_text
+          //});
+          pop_up = new L.Rrose({offset: new L.Point(0,-10), autoPan: false}).setContent(pop_up_text);
+          a.layer.bindPopup(pop_up).openPopup();
+        });
 
+        markers.on('clustermouseout', function (a) {
+          setTimeout(function(){map.closePopup()}, 300);
+        })
+
+        $("#side_bar").html(side_bar_html); 
+        $(".mini-slides").slidesjs({
+          play: {auto: false, interval: 9000, swap: true, pauseOnHover: true},
+          height: 65,
+          width: 100
+        });
+      }else{         
         <% if @lat && @lng && @zoom %>
           map.setView(new L.LatLng(<%= "#{@lat}, #{@lng}" %>), <%= @zoom %>);
         <% else %>
-          <% if @loc %>
-            map.setView(new L.LatLng(<%= "#{@loc.latitude}, #{@loc.longitude}" %>), 15);
-          <% end %>
+          map.setView(new L.LatLng( 22.2670, 114.1880), 12);
         <% end %>
+        $("#side_bar").html(""); 
+      }
+      <% end %>
 
-
-     });
+      <% if @lat && @lng && @zoom %>
+        map.setView(new L.LatLng(<%= "#{@lat}, #{@lng}" %>), <%= @zoom %>);
+      <% else %>
+        <% if @loc %>
+          map.setView(new L.LatLng(<%= "#{@loc.latitude}, #{@loc.longitude}" %>), 15);
+        <% end %>
+      <% end %>
+    });
 
   function room_count_filter(property_rooms){    
      no_of_rooms = $("#no_of_rooms").val();
@@ -368,21 +426,22 @@
       return true;
     } 
   }
-    function invite_user(property_id, title){
-      property_id = property_id;
-      user_id = '<%= current_user.id if current_user %>';
-      title   = title ;
+  
+  function invite_user(property_id, title){
+    property_id = property_id;
+    user_id = '<%= current_user.id if current_user %>';
+    title   = title ;
+  
+    $("#invitee_list").append("<div class='prop-title'><div class='remove-prop'>X</div>" + title + "</div>" );
+    $("#contact-"+property_id).hide();
+    $.ajax({
+      url: "/properties/"+ property_id + "/add_map_invitee?user_id=" + user_id,
+      type: "POST", 
+      data: {},
+      beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}, 
+      success: function(){}
     
-      $("#invitee_list").append("<div class='prop-title'><div class='remove-prop'>X</div>" + title + "</div>" );
-      $("#contact-"+property_id).hide();
-      $.ajax({
-        url: "/properties/"+ property_id + "/add_map_invitee?user_id=" + user_id,
-        type: "POST", 
-        data: {},
-        beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))}, 
-        success: function(){}
-      
-      });
-    }
+    });
+  }
 </script>
 
