@@ -53,6 +53,10 @@ class PropertiesController < ApplicationController
     else
       @properties = Property.where.not("latitude is null or longitude is null")
     end
+    if params[:sort_by].present?
+      @properties = @properties.order('created_at DESC') if params[:sort_by] == 'date'
+      @properties = @properties.sort_by{|p| p.price} if params[:sort_by] == 'price'
+    end
     #if params[:address] != ''
       @loc = Geocoder.search(params[:address]).first
     #else
