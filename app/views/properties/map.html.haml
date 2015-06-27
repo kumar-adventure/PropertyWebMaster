@@ -85,7 +85,7 @@
       %div.col-md-8.site-bar{style: 'padding-left: 0px; padding-right: 0px;'}
         %form.navbar-form.navbar-left{role: "search", style: "width: 100%", :action => map_properties_path, :autocomplete => "off", :method => "get" }
           .col-md-12.input-group
-          %input#tags.col-md-8.search-tag.form-control{name: "address", placeholder: "Search property", type: "search", style: 'width: 80%', value: params[:address].present? ? params[:address] : 'Hong Kong' }/
+          %input#tags.col-md-8.search-tag.form-control{name: "address", placeholder: "Search property", type: "search", style: 'width: 80%', value: params[:address] }/
           %div.input-group-btn.search-tag
             %button.btn.btn-primary{:type => "button", style: 'padding-top:12px;padding-bottom:12px;padding-left:12px;padding-right: 10px;', id: 'searchProperty'}
               %span.glyphicon.glyphicon-search

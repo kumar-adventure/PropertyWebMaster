@@ -1,0 +1,35 @@
+<%properties.each do |property|%>
+  <div class="prop-block">  
+    <div class="span2"> 
+      <div class="mini-slides" style="overflow: hidden;">
+        <div class="slidesjs-container" style="overflow: hidden; position: relative; width: 170px; height: 110.5px;">
+          <div class="slidesjs-control" style="position: relative; left: 0px; width: 170px; height: 110.5px;">
+            <%property.property_images do |img|%>
+              <img src="<%img.photo.url%>" class="slidesjs-slide" slidesjs-index="0" style="position: absolute; top: 0px; left: 0px; width: 100%; -webkit-backface-visibility: hidden; z-index: 10;">
+            <%end%>
+          </div>
+        </div>
+        <a class="slidesjs-previous slidesjs-navigation" href="#" title="Previous">Previous</a>
+        <a class="slidesjs-next slidesjs-navigation" href="#" title="Next">Next</a>
+        <ul class="slidesjs-pagination">
+          <li class="slidesjs-pagination-item">
+            <a href="#" data-slidesjs-item="0" class="active">1</a>
+          </li>
+          <li class="slidesjs-pagination-item">
+            <a href="#" data-slidesjs-item="1">2</a>
+          </li>
+        </ul>
+      </div>  
+    </div>  
+    <div class="span3 property-details"> 
+      <%=link_to property.title, property, target: '_blank'%><br><%=property.full_address%><br>   
+      <div class="span3 additional-details">     
+        <b> Area :</b><%=property.saleable_area%> sqft <br><b> No. of rooms :</b><%=property.total_rooms%>
+      </div> </div> 
+      <div class="span2 pull-right">   
+        <div class="additional-sidebar-details"> <b> Price : </b>$<%=property.price%> <br> <b> Rent : </b>$<%=property.rent%>   
+      </div> 
+      <button class="btn btn-warning contact" onclick="return invite_user(<%=property.id%>, '<%=property.title%>');" id="contact-<%=property.id%>">Contact Us</button> 
+    </div>
+  </div>
+<%end%>
