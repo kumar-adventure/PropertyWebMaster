@@ -46,9 +46,11 @@ class PropertiesController < ApplicationController
   def map_block
     @lat = params[:lat]
     @lng = params[:lng]
-    @zoom = params[:zoom]  
-    #params[:address] = params[:address].to_s != "" ? params[:address] : "Hong Kong"
-    if params[:address].to_s != ""
+    @zoom = params[:zoom]
+
+    params[:address] = params[:address].present? ? params[:address] : 'Hong Kong'
+    
+    if params[:address].present?
       @properties = Property.near(params[:address]).where.not("latitude is null or longitude is null")
     else
       @properties = Property.where.not("latitude is null or longitude is null")
@@ -63,6 +65,10 @@ class PropertiesController < ApplicationController
     #  @loc = nil
     #end
     render layout: false
+  end
+
+  def get_properties
+    @properties = Property.near([params[:lat], params[:lng]], 0).where.not("latitude is null or longitude is null")
   end
 
   def map

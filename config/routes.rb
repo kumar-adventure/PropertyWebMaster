@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       get :translate_to_chinese
       get :invite_view
       get :temp_image
+      get :get_properties
     end
 
     member do
