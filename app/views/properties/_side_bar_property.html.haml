@@ -1,0 +1,36 @@
+- properties.each do |property|
+  .prop-block
+    .span2
+      .mini-slides{:style => "overflow: hidden;"}
+        .slidesjs-container{:style => "overflow: hidden; position: relative; width: 170px; height: 110.5px;"}
+          .slidesjs-control{:style => "position: relative; left: 0px; width: 170px; height: 110.5px;"}
+            - property.property_images do |img|
+              %img.slidesjs-slide{"slidesjs-index" => "0", :src => "<haml_silent>img.photo.url</haml_silent>", :style => "position: absolute; top: 0px; left: 0px; width: 100%; -webkit-backface-visibility: hidden; z-index: 10;"}/
+        %a.slidesjs-previous.slidesjs-navigation{:href => "#", :title => "Previous"} Previous
+        %a.slidesjs-next.slidesjs-navigation{:href => "#", :title => "Next"} Next
+        %ul.slidesjs-pagination
+          %li.slidesjs-pagination-item
+            %a.active{"data-slidesjs-item" => "0", :href => "#"} 1
+          %li.slidesjs-pagination-item
+            %a{"data-slidesjs-item" => "1", :href => "#"} 2
+    .span3.property-details
+      = link_to property.title, property, target: '_blank'
+      %br/
+      = property.full_address
+      %br/
+      .span3.additional-details
+        %b Area :
+        = property.saleable_area
+        sqft
+        %br/
+        %b No. of rooms :
+        = property.total_rooms
+    .span2.pull-right
+      .additional-sidebar-details
+        %b> Price :
+        $#{property.price}
+        %br/
+        = succeed "$" do
+          %b Rent :
+        = property.rent
+      %button.btn.btn-warning.contact{:id => "contact-#{property.id}", :onclick => "return invite_user(#{property.id}, '#{property.title}');"} Contact Us
