@@ -11,9 +11,7 @@
       lng = cnt.lng ; 
       zoom = map.getZoom();
 
-      $.post("/properties/map_block", {address: $("#tags").val(), lat: lat, lng: lng, zoom: zoom },function(resp){
-        $("#leaflet_map_canvas").html(resp);
-      })
+      $.get("/properties/get_properties", { lat: lat, lng: lng, zoom: zoom },function(resp){})
     })
     
     $('#leaflet_map_canvas').on('click', function(e){
