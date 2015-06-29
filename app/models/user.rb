@@ -22,16 +22,21 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable
   devise :database_authenticatable, :registerable, :confirmable,
-    :recoverable, :rememberable, :trackable, :validatable, :omniauthable , :omniauth_providers => [:facebook, :linkedin]
+    :recoverable, :rememberable, :trackable, :validatable, :omniauthable , 
+    :omniauth_providers => [:facebook, :linkedin]
 
   validates_format_of :email, :without => TEMP_EMAIL_REGEX, on: :update
 
   EDUCATION = ['Primary', 'Secondary', 'Post-Secondary', 'University', 'Postgraduate or Above']
-  OCCUPATION = [ 'Accounting/Audit', 'Administration/Policy', 'Civil Service', 'Education/Training', 'Engineering/Construction', 
-                 'Environment', 'Executive/Resources Management', 'Hotel/Travel', 'Information Technology/Technical Support', 
-                 'Insurance/Investment', 'Legal Service', 'Media/Publishing', 'Medical Service', 'Public Relation/Advertising Marketing', 
-                 'Social/Community Service', 'Trade/Finance/Economic/Industry', 'Transportation', 'Others (Please specify)' ]
+  OCCUPATION = [ 'Accounting/Audit', 'Administration/Policy', 'Civil Service', 'Education/Training',
+   'Engineering/Construction', 'Environment', 'Executive/Resources Management', 'Hotel/Travel',
+   'Information Technology/Technical Support', 'Insurance/Investment', 'Legal Service',
+   'Media/Publishing', 'Medical Service', 'Public Relation/Advertising Marketing',
+   'Social/Community Service', 'Trade/Finance/Economic/Industry', 'Transportation', 
+   'Others (Please specify)' ]
+
   AGE = ['18', '18-25', '26-35', '36-45', '46-55', '56-65', '66-75', 'older than 75', '' ]
+
   MONTHLYINCOME = ['$10000' , '$10000-$20000', '$20000-$30000', '$30000-$50000', '$50000-$75000', '$75000-$100000', '>$100,000', '']
 
   AWARDINGINSTITUTE = ['City University of Hong Kong', 'Hong Kong Baptist University', 'Lingnan University', 'The Chinese University of Hong Kong', 'The Hong Kong Institute of Education', 'The Hong Kong Polytechnic University', 'The Hong Kong University of Science and Technology', 'The University of Hong Kong', 'The Open University of Hong Kong', 'Hong Kong Shue Yan University', 'Chu Hai College of Higher Education', 'Hang Seng Management College', 'Tung Wah College', 'Caritas Institute of Higher Education', 'Hong Kong Academy for Performing Arts', 'Centennial College', 'Other institutions in Hong Kong', 'Australia', 'Canada', 'Mainland China', 'New Zealand', 'Taiwan', 'UK', 'USA', 'Others']
